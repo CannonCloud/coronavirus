@@ -1,7 +1,11 @@
+# TO DO
+  # Only select most recent snapshot per day in order to not count twice per day
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(googlesheets4)
+library(lubridate)
 
 link <- "https://docs.google.com/spreadsheets/d/1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w/htmlview?usp=sharing&sle=true"
 metadata <- sheets_get(link)
@@ -12,10 +16,21 @@ good_format_after <- which(metadata$sheets$name=="Jan27_9am")
 
 df <- sheets_read(link, sheet = 1)
 for (i in 2:good_format_after) {
-  df <- rbind(gdf, sheets_read(link, sheet = i))
+  dftemp <- sheets_read(link, sheet = i)
+  dftemp <- dftemp[,1:6]
+  df <- rbind(df, dftemp)
+}
+###########################
+df <- sheets_read(link, sheet = 1)
+bind_rows(df, sheets_read(link, sheet = 2))
+for (i in 1:length(metadata$sheets$name)) {
+  df <- bind_rows(df, sheets_read(link, sheet = i))
 }
 
+##########################
+
 glimpse(df)
+columns <- c("province", "country", "date", "confirmed", "deaths", "recovered")
 
 df %>% 
   rename(province = `Province/State`,
@@ -27,12 +42,15 @@ df %>%
   ) %>% 
   mutate(confirmed = ifelse(is.na(confirmed), 0, confirmed)) %>% 
   mutate(deaths = ifelse(is.na(deaths), 0, deaths)) %>% 
-  mutate(recovered = ifelse(is.na(recovered), 0, recovered)) -> dfc
+  mutate(recovered = ifelse(is.na(recovered), 0, recovered)) %>% 
+  mutate(date = replace(date, is.na(date), as.Date("2020-01-21"))) %>%
+  select(columns) -> dfc 
 
 dfc$net_infected <- dfc$confirmed - dfc$deaths - dfc$recovered  
 
 dfc %>% 
-  group_by(date) %>% 
+  mutate(date = as.Date(date)) %>% 
+  group_by(date) %>% # reduces granularity to days w/o time
   summarize(confirmed = sum(confirmed),
             deaths = sum(deaths),
             recovered = sum(recovered),
