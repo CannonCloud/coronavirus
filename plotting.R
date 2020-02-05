@@ -12,7 +12,8 @@ dfa %>%
   geom_line(aes(y = -c(recovered)), color = "blue") +
   labs(x = 'Date',
        y = "Number of People",
-       title = "Coronavirus number of infected, deaths, recovered")
+       title = "Coronavirus number of infected, deaths, recovered",
+        subtitle = paste("Last Update:", max(dfa$date)))
 
 # from long to wide
 dfa %>% 
@@ -27,6 +28,17 @@ dfaw %>%
        title = "Coronavirus Statistics",
        subtitle = paste("Last Update:", max(dfaw$date)))
   
+## new time series data
+
+tsl %>% 
+  ggplot(aes(x = time)) +
+  geom_point(aes(y = deaths)) +
+ # facet_wrap(.~ type, scales = "free_y") +
+  labs(x = 'Date',
+       y = "Number of People",
+       title = "Coronavirus Deaths")
+
+
 #####################################################
 # Google Trends
 #####################################################

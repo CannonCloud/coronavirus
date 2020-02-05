@@ -1,5 +1,5 @@
 # TO DO
-  # Only select most recent snapshot per day in order to not count twice per day
+  # Only select most recent snapshot per day to avoid counting twice per day
 
 library(dplyr)
 library(tidyr)
@@ -21,11 +21,23 @@ for (i in 2:good_format_after) {
   df <- rbind(df, dftemp)
 }
 ###########################
-df <- sheets_read(link, sheet = 1)
+df <- sheets_read(link, sheet = 5)
 bind_rows(df, sheets_read(link, sheet = 2))
-for (i in 1:length(metadata$sheets$name)) {
+for (i in 6:length(metadata$sheets$name)) {
   df <- bind_rows(df, sheets_read(link, sheet = i))
 }
+
+# new time series data
+ts_link <- "https://docs.google.com/spreadsheets/d/1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo/htmlview?usp=sharing&sle=true"
+ts <- sheets_read(ts_link, sheet = 1)
+
+ts %>%
+  gather("time", "deaths", -c(1:5)) %>% 
+  rename(province = `Province/State`,
+         country = `Country/Region`,
+         firstcase = `First confirmed date in country (Est.)`,
+         ) %>% 
+  mutate(time = mdy_hm(time)) -> tsl
 
 ##########################
 
@@ -64,9 +76,9 @@ dfc %>%
 
 library(gtrendsR)
 
-keywords <- c("coronavirus", "china", "sars", "flu")
+keywords <- c("coronavirus", "china", "mask", "superbowl")
 country <- c("US")
-time <- ("2020-01-01 2020-01-31")
+time <- ("2020-01-01 2020-02-05")
 channel <- "news"
 
 trends <- gtrends(keywords, gprop = channel, geo = country, time = time)
@@ -91,5 +103,5 @@ sp500_names <- tq_index("S&P500")
 
 sp500 <- tq_get(sp500_names$symbol,
           from = "2020-01-01",
-          to = "2020-01-31",
+          to = "2020-02-04",
           get = "stock.prices")
