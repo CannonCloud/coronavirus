@@ -30,13 +30,13 @@ dfaw %>%
   
 ## new time series data
 
-tsl %>% 
+tslu %>% 
   ggplot(aes(x = time)) +
-  geom_point(aes(y = deaths)) +
+  geom_point(aes(y = confirmed)) +
  # facet_wrap(.~ type, scales = "free_y") +
   labs(x = 'Date',
        y = "Number of People",
-       title = "Coronavirus Deaths")
+       title = "Coronavirus Confimed Cases")
 
 
 #####################################################

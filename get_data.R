@@ -32,12 +32,22 @@ ts_link <- "https://docs.google.com/spreadsheets/d/1UF2pSkFTURko2OvfHWWlFpDFAr1U
 ts <- sheets_read(ts_link, sheet = 1)
 
 ts %>%
-  gather("time", "deaths", -c(1:5)) %>% 
+  gather("time", "confirmed", -c(1:5)) %>% 
   rename(province = `Province/State`,
          country = `Country/Region`,
          firstcase = `First confirmed date in country (Est.)`,
          ) %>% 
   mutate(time = mdy_hm(time)) -> tsl
+
+# aggregate by day
+timestamps <- unique(tsl$time)
+tsl$day <- as.Date(tsl$time)
+
+tsl %>% 
+  group_by(day) %>% 
+  dplyr::filter(time == max(time)) -> tslu
+ 
+unique(tslu$time) 
 
 ##########################
 
