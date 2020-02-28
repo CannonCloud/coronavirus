@@ -1,6 +1,3 @@
-# TO DO
-  # Only select most recent snapshot per day to avoid counting twice per day
-
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -29,17 +26,17 @@ for (i in 6:length(metadata$sheets$name)) {
 
 # new time series data
 ts_link <- "https://docs.google.com/spreadsheets/d/1UF2pSkFTURko2OvfHWWlFpDFAr1UxCBA4JLwlSP6KFo/htmlview?usp=sharing&sle=true"
-ts <- sheets_read(ts_link, sheet = 1)
+ts <- sheets_read(ts_link, sheet = 2)
 
 ts %>%
   gather("time", "confirmed", -c(1:5)) %>% 
   rename(province = `Province/State`,
          country = `Country/Region`,
-         firstcase = `First confirmed date in country (Est.)`,
+         #firstcase = `First confirmed date in country (Est.)`,
          ) %>% 
   mutate(time = mdy_hm(time)) -> tsl
 
-# aggregate by day
+# take only most recent snapshot by day
 timestamps <- unique(tsl$time)
 tsl$day <- as.Date(tsl$time)
 
@@ -48,6 +45,11 @@ tsl %>%
   dplyr::filter(time == max(time)) -> tslu
  
 unique(tslu$time) 
+
+# aggregate quantities per day over provinces
+tslu %>% 
+  group_by(day) %>% 
+  summarize(confirmed = sum(confirmed))
 
 ##########################
 
@@ -86,9 +88,11 @@ dfc %>%
 
 library(gtrendsR)
 
-keywords <- c("coronavirus", "china", "mask", "superbowl")
+keywords <- c("coronavirus", "china", "superbowl", "sanders", "trump")
 country <- c("US")
-time <- ("2020-01-01 2020-02-05")
+keywords <- c("coronavirus", "china", "webasto", "thüringen", "trump")
+country <- c("DE")
+time <- ("2020-01-01 2020-02-12")
 channel <- "news"
 
 trends <- gtrends(keywords, gprop = channel, geo = country, time = time)
