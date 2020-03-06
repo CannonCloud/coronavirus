@@ -117,5 +117,5 @@ sp500_names <- tq_index("S&P500")
 
 sp500 <- tq_get(sp500_names$symbol,
           from = "2020-01-01",
-          to = "2020-02-04",
+          to = "2020-02-28",
           get = "stock.prices")

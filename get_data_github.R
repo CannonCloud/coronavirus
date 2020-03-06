@@ -57,7 +57,7 @@ dfc$netinfected <- dfc$confirmed - dfc$deaths - dfc$recovered
 dfc %>%
   select(c("province", "country", "latitude", "longitude", "time", "confirmed", "recovered", "deaths", "netinfected")) -> dfc
 
-write_csv(recovered, paste("data\\total\\", Sys.Date(), "_total.csv", sep =""))
+write_csv(dfc, paste("data\\total\\", Sys.Date(), "_total.csv", sep = ""))
 
 
 # generate aggregate data set over all regions per single date
