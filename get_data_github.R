@@ -62,7 +62,6 @@ write_csv(dfc, paste("data\\total\\", Sys.Date(), "_total.csv", sep = ""))
 
 # generate aggregate data set over all regions per single date
 dfc %>% 
-  #mutate(date = as.Date(date)) %>% 
   group_by(time) %>% # reduces granularity to days w/o time
   summarize(confirmed = sum(confirmed),
             deaths = sum(deaths),
@@ -70,6 +69,38 @@ dfc %>%
             netinfected = sum(netinfected)
   ) -> df_single_day
 
+# aggregate by country
+dfc %>% 
+  group_by(time, country) %>%
+  summarize(confirmed = sum(confirmed),
+            deaths = sum(deaths),
+            recovered = sum(recovered),
+            netinfected = sum(netinfected)
+  ) -> df_single_day_country
+
+# split China vs. rest of world data sets
+dfc %>% 
+  filter(country == "Mainland China") -> dfc_china
+
+dfc %>% 
+  filter(country != "Mainland China") -> dfc_excl_china
+
+# generate aggregate data set over for two separate dfs
+dfc_china %>% 
+  group_by(time) %>% # reduces granularity to days w/o time
+  summarize(confirmed = sum(confirmed),
+            deaths = sum(deaths),
+            recovered = sum(recovered),
+            netinfected = sum(netinfected)
+  ) -> df_single_day_china
+
+dfc_excl_china %>% 
+  group_by(time) %>% # reduces granularity to days w/o time
+  summarize(confirmed = sum(confirmed),
+            deaths = sum(deaths),
+            recovered = sum(recovered),
+            netinfected = sum(netinfected)
+  ) -> df_single_day_excl_china
 
 ##########################################################
 # Download Google Trends
@@ -81,7 +112,7 @@ keywords <- c("coronavirus", "china", "superbowl", "sanders", "trump")
 country <- c("US")
 keywords <- c("coronavirus", "china", "webasto", "thüringen", "trump")
 country <- c("DE")
-time <- ("2020-01-01 2020-02-28")
+time <- ("2020-01-01 2020-03-06")
 channel <- "web"
 
 trends <- gtrends(keywords, gprop = channel, geo = country, time = time)
@@ -104,5 +135,5 @@ sp500_names <- tq_index("S&P500")
 
 sp500 <- tq_get(sp500_names$symbol,
                 from = "2020-01-01",
-                to = "2020-02-28",
+                to = "2020-03-06",
                 get = "stock.prices")

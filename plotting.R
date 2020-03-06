@@ -4,7 +4,11 @@ source("get_data_github.R")
 # Coronavirus infected, deaths, recovered
 #####################################################
 
-df_single_day %>% 
+# 1) Entire Data Set
+# define data set
+plot_data_single_day <- df_single_day_excl_china #df_single_day #df_single_day_china
+
+plot_data_single_day %>% 
   ggplot(aes(x = time)) +
   geom_line(aes(y = confirmed)) +
   geom_line(aes(y = netinfected), linetype = "dashed") +
@@ -16,10 +20,10 @@ df_single_day %>%
        subtitle = paste("Last Update:", max(df_single_day$time)))
 
 # from long to wide
-df_single_day %>% 
-  pivot_longer(confirmed:netinfected, names_to = "type", values_to = "amount") -> df_single_day_long
+plot_data_single_day %>% 
+  pivot_longer(confirmed:netinfected, names_to = "type", values_to = "amount") -> plot_data_single_day_long
 
-df_single_day_long %>% 
+plot_data_single_day_long %>% 
   ggplot(aes(x = time)) +
   geom_line(aes(y = amount)) +
   geom_point(aes(y = amount)) +
@@ -28,6 +32,7 @@ df_single_day_long %>%
        y = "Number of Patients",
        title = "COVID-19 Global Statistics",
        subtitle = paste("Last Update:", max(df_single_day_long$time)))
+
 
 #####################################################
 # Coronavirus Maps
@@ -41,7 +46,7 @@ leaflet() %>%
 leaflet() %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
   addMarkers(dfc[1:7,], lng = dfc[1:7,]$longitude, lat = dfc[1:7,]$latitude) %>% 
-  addPolygons(dfc[1:7,]$country)
+  addPolygons(dfc[1:7,]$country) 
   addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
               color = ~pal(gdp_md_est))
 
