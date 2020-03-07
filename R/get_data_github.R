@@ -14,14 +14,14 @@ links <- c("https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_
            "https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"
            )
 
-deaths <- read_csv(links[1])
-confirmed <- read_csv(links[2])
+confirmed <- read_csv(links[1])
+deaths <- read_csv(links[2])
 recovered <- read_csv(links[3])
-write_csv(deaths, paste("data\\individual\\", Sys.Date(), "_deaths.csv", sep =""))
 write_csv(confirmed, paste("data\\individual\\", Sys.Date(), "_confirmed.csv", sep =""))
+write_csv(deaths, paste("data\\individual\\", Sys.Date(), "_deaths.csv", sep =""))
 write_csv(recovered, paste("data\\individual\\", Sys.Date(), "_recovered.csv", sep =""))
 
-dl <- list(deaths, confirmed, recovered)
+dl <- list(confirmed, deaths, recovered)
 
 names(dl) <- c("confirmed", "deaths", "recovered")
 
