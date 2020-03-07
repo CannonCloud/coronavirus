@@ -124,6 +124,16 @@ trends$interest_over_time %>%
   mutate(date = as.Date(date)) %>% 
   mutate(time = as.Date(time)) -> time_trend
 
+# reproducible routine for downloading and saving trends data for the project
+gtrend_list <- gtrends("coronavirus", gprop = "web", geo = "", time = "2020-01-01 2020-03-07")
+
+gtrend_list$interest_over_time %>% 
+  mutate(hits = replace(hits, hits == "<1", 0)) %>% 
+  mutate(hits = as.integer(hits)) %>% 
+  mutate(date = as.Date(date)) %>% 
+  select(c("date", "hits", "geo", "keyword", "gprop")) -> gtrend_df
+
+write_csv(gtrend_df, paste("data\\gtrends\\", "gtrends.csv", sep = ""))
 
 ##########################################################
 # Download Stock Market Data
@@ -137,3 +147,12 @@ sp500 <- tq_get(sp500_names$symbol,
                 from = "2020-01-01",
                 to = "2020-03-06",
                 get = "stock.prices")
+
+# reproducible routine for downloading and saving trends data for the project
+selected_stocks <- c("^GSPC", "^GDAXI", "NFLX", "LHA.DE", "GILD", "MRNA", "NCLH")
+stock_df <- tq_get(selected_stocks,
+       from = "2020-01-01",
+       to = "2020-03-07",
+       get = "stock.prices")
+
+write_csv(stock_df, paste("data\\stocks\\", "stocks.csv", sep = ""))
