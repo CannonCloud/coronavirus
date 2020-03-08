@@ -45,7 +45,6 @@ grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), widt
 
 ### 2. Data Wrangling and Visualization of COVID-19-data
 
-
 ### 3. Critical Thinking
 
 ### 4. Visualization with Maps

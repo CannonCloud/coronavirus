@@ -6,7 +6,7 @@ source("get_data_github.R")
 
 # 1) Entire Data Set
 # define data set
-plot_data_single_day <- df_single_day_excl_china #df_single_day #df_single_day_china
+plot_data_single_day <- df_single_day #df_single_day #df_single_day_excl_china #df_single_day #df_single_day_china
 
 plot_data_single_day %>% 
   ggplot(aes(x = time)) +
@@ -31,7 +31,7 @@ plot_data_single_day_long %>%
   labs(x = 'Date',
        y = "Number of Patients",
        title = "COVID-19 Global Statistics",
-       subtitle = paste("Last Update:", max(df_single_day_long$time)))
+       subtitle = paste("Last Update:", max(plot_data_single_day_long$time)))
 
 
 #####################################################

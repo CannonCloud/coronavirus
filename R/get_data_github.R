@@ -102,6 +102,31 @@ dfc_excl_china %>%
             netinfected = sum(netinfected)
   ) -> df_single_day_excl_china
 
+## create modified data sets for didactical reasons for use by students
+# create ID
+dfc_id <- tibble::rowid_to_column(dfc, "id")
+
+dfc %>% 
+  tibble::rowid_to_column("id") %>% 
+  # create NA's for all zeros (to be reversed by students)
+  na_if(0) -> dfc_id
+
+# create df with only confirmed cases (base df)
+dfc_id %>% 
+  select(c("id", "province", "country", "latitude", "longitude", "time", "confirmed")) %>% 
+  write_csv("data\\modified_covid\\confirmed.csv")
+
+# create individual csv's for recovered and deaths
+dfc_id %>% 
+  select(c("id", "deaths")) %>% 
+  write_csv("data\\modified_covid\\deaths.csv")
+
+dfc_id %>% 
+  select(c("id", "recovered")) %>% 
+  write_csv("data\\modified_covid\\recovered.csv")
+
+
+
 ##########################################################
 # Download Google Trends
 ##########################################################
