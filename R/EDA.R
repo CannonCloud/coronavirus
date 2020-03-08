@@ -1,7 +1,11 @@
 # Preliminaries
 library(tidyverse)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
+library(maps)
+library(countrycode)
+library(viridis)
 library(magick) # for including a .png in plots
 TA_logo <- image_read("R/plots/TA_logo.png")
 
@@ -141,7 +145,9 @@ df_merged %>%
   summarize(confirmed = sum(confirmed),
             deaths = sum(deaths),
             recovered = sum(recovered),
-            netinfected = sum(netinfected)) -> df_merged_country_time
+            netinfected = sum(netinfected),
+            lat = mean(latitude),
+            lon = mean(longitude)) -> df_merged_country_time
 
 df_merged_country_time %>% 
   filter(country %in% top_countries) %>% # optional filter
@@ -251,18 +257,18 @@ grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), widt
 # calculate mortality rates
 df_merged_country_time %>% 
   filter(time == max(conf$time)) %>% 
-  mutate(mortality = deaths/netinfected) %>% 
+  mutate(mortality = deaths/confirmed) %>% 
   arrange(desc(mortality)) %>% 
-  filter(country %in% top_countries) %>% 
-#  head(20) %>% 
+#  filter(country %in% top_countries) %>% 
+  head(25) %>% 
   ggplot(aes(x = reorder(country, mortality))) +
   geom_bar(aes(weight = mortality), fill = "#3c4ee0") +
   coord_flip() +
-  labs(x = 'Date',
-       y = "Number of Patients",
+  labs(x = "Country",
+       y = "Mortality Rate",
        title = "Covid-19: Mortality Rate Differs Drastically Depending Countries",
        subtitle = paste("Mortality Rate by Country. Last update:", max(conf_agg$time)),
-       caption = "Note: Mortality rate calculated as deaths/netinfected") +
+       caption = "Note: Mortality rate calculated as deaths/confirmed") +
   theme(plot.title = element_text(color = "#3c4ee0", face = 'bold'),
         plot.caption = element_text(hjust = 0, face = "italic"))
 grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), width = unit(1.5, 'inches'))
@@ -270,3 +276,90 @@ grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), widt
 ### 3. Critical Thinking
 
 ### 4. Visualization with Maps
+
+# prepare data set
+df_merged_country_time %>% 
+  mutate(mortality = deaths/confirmed,
+         countrycode = countrycode(country, origin = "country.name", destination = "iso3c")) %>% 
+  arrange(desc(mortality)) %>% 
+  filter(time == max(conf$time)) -> df_maps
+
+world_map <- map_data("world")
+world_map %>% 
+  mutate(countrycode = countrycode(region, origin = "country.name", destination = "iso3c")) -> world_map
+
+world_map %>% 
+  left_join(df_maps %>%
+              select(c("time", "confirmed", "deaths", "recovered", "netinfected", "mortality", "countrycode")),
+            by = "countrycode") -> world_merged
+
+world_merged %>% 
+  group_by(region, countrycode, time) %>% 
+  summarize(long_mean = mean(long),
+            lat_mean = mean(lat),
+            confirmed = median(confirmed),
+            deaths = median(deaths),
+            recovered = median(recovered),
+            netinfected = median(netinfected),
+            mortality = median(mortality)
+            ) -> label_centroids
+
+world_merged %>% 
+  ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = confirmed), color = "black") +
+  scale_fill_gradient(low = "grey", high = "red", na.value = NA)
+   scale_fill_viridis(option = "viridis")
+  
+world_merged %>% 
+  ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = mortality), color = "black") +
+  scale_fill_gradient(low = "grey", high = "red", na.value = NA) +
+  theme_void()
+
+# Europe only
+eu_countries <- c("AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST",
+                  "FIN", "FRA", "DEU", "GRC", "HUN", "IRL", "ITA", "LVA",
+                  "LTU", "LUX", "MLT", "NLD", "POL", "PRT", "ROU", "SVK",
+                  "SVN", "ESP", "SWE", "GBR")
+
+country_lookup <- read.csv("data/misc/country_lookup.csv")
+country_lookup %>% 
+  filter(region == "Europe") %>%
+  filter(alpha.3 != "RUS")  %>%         
+  pull(alpha.3) -> cc_europe
+
+world_merged %>% 
+  filter(countrycode %in% cc_europe) %>% 
+  ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = confirmed), color = "black") +
+  geom_text(data = label_centroids %>% filter(countrycode %in% cc_europe),
+            aes(x = long_mean, y = lat_mean, label = confirmed),
+            inherit.aes = FALSE) +
+  scale_fill_gradient(low = "lightgrey", high = "red", na.value = NA) +
+  theme_void()
+
+map_data("world", region = eu_countries) %>% 
+  mutate(countrycode = countrycode(region, origin = "country.name", destination = "iso3c")) %>% 
+  View()
+  left_join(df_maps %>%
+              select(c("time", "confirmed", "deaths", "recovered", "netinfected", "mortality", "countrycode")),
+            by = "countrycode") %>% 
+  
+  ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = confirmed), color = "black") +
+  scale_fill_gradient(low = "grey", high = "red", na.value = NA)
+
+# save all plots
+  plots.dir.path <- list.files(tempdir(), pattern="rs-graphics", full.names = TRUE); 
+  plots.png.paths <- list.files(plots.dir.path, pattern=".png", full.names = TRUE)
+  plots.png.detials <- file.info(plots.png.paths)
+  plots.png.detials <- plots.png.detials[order(plots.png.detials$mtime),]
+  sorted.png.names <- gsub(plots.dir.path, "R/plots/", row.names(plots.png.detials), fixed=TRUE)
+  numbered.png.names <- paste0("R/plots/", 1:length(sorted.png.names), ".png")
+  
+  file.copy(from=plots.png.paths, to="R/plots/")
+  
+  # Rename all the .png files as: 1.png, 2.png, 3.png, and so on.
+  file.rename(from=sorted.png.names, to=numbered.png.names)
+  
+

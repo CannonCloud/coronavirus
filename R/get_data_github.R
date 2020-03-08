@@ -181,3 +181,10 @@ stock_df <- tq_get(selected_stocks,
        get = "stock.prices")
 
 write_csv(stock_df, paste("data\\stocks\\", "stocks.csv", sep = ""))
+
+##########################################################
+# Download and Save Country Lookup Table
+##########################################################
+
+country_lookup <- read_csv("https://raw.github.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv")
+write_csv(country_lookup, paste("data\\misc\\", "country_lookup.csv", sep = ""))
