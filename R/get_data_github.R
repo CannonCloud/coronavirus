@@ -150,7 +150,7 @@ trends$interest_over_time %>%
   mutate(time = as.Date(time)) -> time_trend
 
 # reproducible routine for downloading and saving trends data for the project
-gtrend_list <- gtrends("coronavirus", gprop = "web", geo = "", time = "2020-01-01 2020-03-07")
+gtrend_list <- gtrends("coronavirus", gprop = "web", geo = "", time = "2020-01-01 2020-03-09")
 
 gtrend_list$interest_over_time %>% 
   mutate(hits = replace(hits, hits == "<1", 0)) %>% 
@@ -170,14 +170,14 @@ sp500_names <- tq_index("S&P500")
 
 sp500 <- tq_get(sp500_names$symbol,
                 from = "2020-01-01",
-                to = "2020-03-06",
+                to = "2020-03-09",
                 get = "stock.prices")
 
 # reproducible routine for downloading and saving trends data for the project
 selected_stocks <- c("^GSPC", "^GDAXI", "NFLX", "LHA.DE", "GILD", "MRNA", "NCLH")
 stock_df <- tq_get(selected_stocks,
        from = "2020-01-01",
-       to = "2020-03-07",
+       to = "2020-03-09",
        get = "stock.prices")
 
 write_csv(stock_df, paste("data\\stocks\\", "stocks.csv", sep = ""))
@@ -188,3 +188,33 @@ write_csv(stock_df, paste("data\\stocks\\", "stocks.csv", sep = ""))
 
 country_lookup <- read_csv("https://raw.github.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv")
 write_csv(country_lookup, paste("data\\misc\\", "country_lookup.csv", sep = ""))
+
+
+##########################################################
+# Generate Prediction Data Set
+##########################################################
+
+# aggregate by country and time
+dfc %>% 
+  group_by(country, time) %>% 
+  summarize(confirmed = sum(confirmed),
+            deaths = sum(deaths),
+            recovered = sum(recovered),
+            netinfected = sum(netinfected),
+            lat = mean(latitude),
+            lon = mean(longitude)) -> dfc_grouped
+
+
+stock_df %>% 
+  select(c("symbol", "date", "adjusted")) %>% 
+  rename(time = date) %>% 
+  pivot_wider(names_from = symbol, values_from = adjusted) -> stocks_wide
+
+dfc_grouped %>% 
+  left_join(stocks_wide, by = "time") %>% 
+  left_join(gtrend %>%
+              rename(time = date,
+                     searchindex = hits) %>% 
+              select(c("time", searchindex)),
+            by = "time") %>% 
+  write_csv(paste("data\\predict\\", "predict.csv", sep = ""))
