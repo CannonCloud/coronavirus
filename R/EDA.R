@@ -5,11 +5,19 @@ library(tidyr)
 library(ggplot2)
 library(maps)
 library(countrycode)
+library(leaflet)
+library(geojsonio)
 library(viridis)
 library(magick) # for including a .png in plots
 TA_logo <- image_read("R/plots/TA_logo.png")
 
+library(GGally)
+
+
+##########################################################
 ## Part A: Exploratory Data Analysis
+##########################################################
+
 ### 1. Visualize Google Searches and Stock Price Time Series
 
 gtrend <- read.csv("data/gtrends/gtrends.csv")
@@ -96,13 +104,6 @@ conf %>%
   summarize(confirmed = sum(confirmed)) %>% 
   filter(country %in% top_countries) %>% 
   droplevels() -> conf_agg_time_country
-
-arrange(conf_agg_time_country, factor(conf_agg_time_country$country, levels = top_countries)) -> temp
-levels(temp$country)
-temp2 %>% 
-  droplevels.data.frame() %>% 
-  arrange(factor(country, levels = top_countries)) -> temp2
-levels(temp2$country)
 
 conf_agg_time_country %>% 
   arrange(factor(country, levels = top_countries)) %>% 
@@ -227,14 +228,6 @@ df_excl_china %>%
             netinfected = sum(netinfected)
   ) -> df_single_day_excl_china
 
-# visualizing all four quantities in one plot (confirmed, deaths, recovered, netinfected) 
-china <- df_single_day_china %>% 
-  ggplot(aes(x = time)) +
-    geom_line(aes(y = confirmed)) +
-    geom_line(aes(y = netinfected), linetype = "dashed") +
-    geom_line(aes(y = -c(deaths)), color = "red") +
-    geom_line(aes(y = -c(recovered)), color = "blue")
-
 
 # Barplot most recent date: by country
 df_merged_country_time %>% 
@@ -307,13 +300,13 @@ world_merged %>%
 world_merged %>% 
   ggplot(aes(x = long, y = lat, group = group)) +
   geom_polygon(aes(fill = confirmed), color = "black") +
-  scale_fill_gradient(low = "grey", high = "red", na.value = NA)
-   scale_fill_viridis(option = "viridis")
+  scale_fill_gradient(low = "#3c4ee0", high = "red", na.value = NA) +
+  theme_void()
   
 world_merged %>% 
   ggplot(aes(x = long, y = lat, group = group)) +
   geom_polygon(aes(fill = mortality), color = "black") +
-  scale_fill_gradient(low = "grey", high = "red", na.value = NA) +
+  scale_fill_gradient(low = "#3c4ee0", high = "red", na.value = NA) +
   theme_void()
 
 # Europe only
@@ -338,16 +331,130 @@ world_merged %>%
   scale_fill_gradient(low = "lightgrey", high = "red", na.value = NA) +
   theme_void()
 
-map_data("world", region = eu_countries) %>% 
-  mutate(countrycode = countrycode(region, origin = "country.name", destination = "iso3c")) %>% 
-  View()
-  left_join(df_maps %>%
-              select(c("time", "confirmed", "deaths", "recovered", "netinfected", "mortality", "countrycode")),
-            by = "countrycode") %>% 
+
+
+# leaflet interactive map
+WorldCountry <- geojsonio::geojson_read("https://raw.github.com/johan/world.geo.json/master/countries.geo.json", what = "sp")
+
+WorldCountry <- WorldCountry[WorldCountry$id %in% data$Country, ]
+
+#Dataframe for choropleth map
+Country <- c("Bulgaria","Pakistan","Turkey")
+Projects <- c(2,1,6)
+data <- data.frame(Country,Projects)
+
+data_Map <- WorldCountry[WorldCountry$id %in% cc_europe, ]
+
+#basemap
+Map <- leaflet(WorldCountry) %>% addTiles() %>% addPolygons()
+
+#set bin and color for choropleth map
+pal <- colorNumeric("Reds", domain = label_centroids$mortality)
+
+#set labels
+labels <- sprintf(
+  "<strong>%s</strong><br/>%g confirmed <sup></sup>",
+  label_centroids$region, label_centroids$confirmed) %>% lapply(htmltools::HTML)
+
+#add polygons,labels and mouse over effect
+Map %>% addPolygons(
+  fillColor = label_centroids$confirmed
+)
   
-  ggplot(aes(x = long, y = lat, group = group)) +
-  geom_polygon(aes(fill = confirmed), color = "black") +
-  scale_fill_gradient(low = "grey", high = "red", na.value = NA)
+Map %>% 
+  addPolygons(
+  fillColor = ~pal(label_centroids$mortality),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = '3',
+  fillOpacity = 1,
+  highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 1,
+    bringToFront = TRUE),
+  label = rev(labels),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto")
+)
+
+##########################################################
+## Part B: Prediction
+##########################################################
+
+train <- read.csv("data/predict/predict.csv")
+
+ggpairs(train %>%
+          select(c("days_outbreak", "confirmed", "deaths", "recovered", "netinfected",
+                   "SP500", "searchindex", "health_index", "population"))) +
+  labs(title = 'Correlation and Scatterplots for Select Features',
+       subtitle = "Get an intuition about which variables might be important for prediction",
+       x = "") +
+  theme_light(base_size = 12) +
+  theme(plot.title = element_text(color = "#3c4ee0", face = 'bold'),
+        legend.position = "none")
+# add TechAcademy Logo
+grid::grid.raster(TA_logo, x = 0.055, y = 0.01, just = c('left', 'bottom'), width = unit(1.5, 'inches'))
+
+# notes
+# - extremely small correlation between number of patients and S&P and searchindex
+#   -> apparently stocks and searches are not driven by the actual numbers, but by something else
+#      might conclude that reaction is not rational?
+# - extremely high negative correlation btw. S&P and searchindex
+#   -> stock value driven by interest in the topic coronavirus?
+
+## SIMPLE REGRESSION
+
+train %>% 
+  drop_na() -> train
+
+lm(confirmed ~ deaths, data = train) %>% 
+  summary()
+
+lm(SP500 ~ searchindex, data = train) %>% 
+  summary()
+
+lm(deaths ~ health_index, data = train) %>% 
+  summary()
+
+lm(deaths ~ population, data = train) %>% 
+  summary()
+
+lm(deaths ~ days_outbreak, data = train) %>% 
+  summary()
+
+lm(deaths ~ country, data = train) %>% 
+  summary()
+
+m_reg1 <- lm(deaths ~ days_outbreak + population + health_index, data = train) 
+yhat <- predict(m_reg1)
+train_pred <- cbind(train, yhat)
+
+train_pred %>% 
+  ggplot(aes(yhat, deaths)) +
+  geom_point()
+
+train_pred %>% 
+  ggplot(aes(yhat, deaths)) +
+  geom_line(aes(color = country))
+
+train %>% 
+  ggplot(aes(x = days_outbreak, y = confirmed)) +
+  geom_line(aes(color = country))
+
+
+
+
+
+
+
+
+
+
 
 # save all plots
   plots.dir.path <- list.files(tempdir(), pattern="rs-graphics", full.names = TRUE); 

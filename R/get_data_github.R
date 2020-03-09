@@ -194,6 +194,23 @@ write_csv(country_lookup, paste("data\\misc\\", "country_lookup.csv", sep = ""))
 # Generate Prediction Data Set
 ##########################################################
 
+# health preparedness index from https://www.ghsindex.org/
+health <- read.csv("data/misc/health_index.csv", sep = ";")
+
+# import population data
+pop <- read_csv("https://raw.github.com/datasets/population/master/data/population.csv")
+pop %>% 
+  filter(Year == 2016) %>% 
+  select(c(`Country Code`, "Value")) %>% 
+  rename(countrycode = `Country Code`,
+         population = Value) -> pop_c
+
+# create countrycode to match data sets
+health %>% 
+  mutate(countrycode = countrycode(country,
+                                   origin = "country.name",
+                                   destination = "iso3c")) -> health
+
 # aggregate by country and time
 dfc %>% 
   group_by(country, time) %>% 
@@ -202,19 +219,54 @@ dfc %>%
             recovered = sum(recovered),
             netinfected = sum(netinfected),
             lat = mean(latitude),
-            lon = mean(longitude)) -> dfc_grouped
+            lon = mean(longitude)) %>% 
+  mutate(countrycode = countrycode(country,
+                                   origin = "country.name",
+                                   destination = "iso3c")) -> dfc_grouped
+
+# get date of first confirmed case
+dfc_grouped %>% 
+  group_by(country) %>% 
+  filter(confirmed != 0) %>% 
+  arrange(time) %>% 
+  slice(1) %>% 
+  ungroup() %>% 
+  select(countrycode, time) %>% 
+  rename(first_confirmed = time) -> date_first_occurence
+
+# add first confirmed date to df and calculate days since outbreak in each country
+dfc_grouped %>% 
+  left_join(date_first_occurence,
+            by = "countrycode") %>% 
+  mutate(days_outbreak = time - first_confirmed,
+         days_outbreak = replace(days_outbreak, which(days_outbreak < 0), 0)) -> dfc_grouped_add
+  
 
 
 stock_df %>% 
   select(c("symbol", "date", "adjusted")) %>% 
-  rename(time = date) %>% 
-  pivot_wider(names_from = symbol, values_from = adjusted) -> stocks_wide
+  pivot_wider(names_from = symbol, values_from = adjusted) %>% 
+  rename(time = date,
+         SP500 = `^GSPC`,
+         DAX30 = `^GDAXI`) -> stocks_wide
 
-dfc_grouped %>% 
+
+# merge all data sets
+dfc_grouped_add %>% 
   left_join(stocks_wide, by = "time") %>% 
   left_join(gtrend %>%
               rename(time = date,
                      searchindex = hits) %>% 
               select(c("time", searchindex)),
             by = "time") %>% 
-  write_csv(paste("data\\predict\\", "predict.csv", sep = ""))
+  left_join(health[,c("health_index", "countrycode")], by = "countrycode") %>% 
+  left_join(pop_c, by = "countrycode") %>% 
+  tibble::rowid_to_column("id") -> dfc_predict 
+
+# check which countries aren't included in health_index/population data
+dfc_predict %>% 
+  filter(is.na(population)) %>% 
+  pull(country) %>% 
+  unique()
+
+write_csv(dfc_predict, paste("data\\predict\\", "predict.csv", sep = ""))
