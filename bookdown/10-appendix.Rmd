@@ -1,0 +1,86 @@
+# Anhang
+## Aufgaben-Checkliste für das Airbnb Data Science Projekt
+
+**Exploratory Data Analysis (Anfänger + Fortgeschrittene)**
+
+1. Visualisieren der verfügbaren Apartments (calendar dataset):
+
+    1.1 Wandle die Werte t/f zu `true` bzw. `false` um
+
+    1.2 Aggregiere die Daten nach dem Datum
+
+    1.3 Plotte die Anzahl der verfügbaren Apartments über die Zeit
+
+2. Visualisieren des listings Datensatz
+
+    2.1 Bereinige und transformiere die Spalten `price` und `cleaning_fee` zu `numeric`-Werten
+
+    2.2 Bestimme mean und standard deviation des Apartment-Preises nach Stadtteil
+
+    2.3 Visualisiere die Preisverteilung des teuersten und günstigsten Stadtteils
+
+    2.4 Visualisiere, ob die `cleaning_fee` benutzt wird um die Preise versteckt zu erhöhen
+
+3. Merging des `listings` und `review` Datensatzes
+
+    3.1 Aggregiere die Reviews anhand der `ID`
+
+    3.2 Merge `listings` und den aggregierten Reviews Datensatz
+
+    3.3 Filtere Apartments und plotte die Anzahl dieser in einem Barplot nach Stadtteil
+
+4. Visualisiere die Apartments auf einer Karte
+
+    4.1 Zeiche einen Punkt für jedes zur Verfügung stehende Apartment auf eine Karte
+
+    4.2 Färbe die Punkte unterschiedlich, je nachdem in welchem Stadteil sie sind
+
+    4.3 Erstelle eine 2d-Density Plot der Apartments auf einer Karte
+
+**Preisvorhersage mit statistischen Verfahren (Fortgeschrittene und ambitionierte Anfänger)**
+
+1. Visualisiere die Korrelationen der Features mit einer Heatmap
+
+2. Regression
+
+    2.1 Einfaches Regressionsmodel mit einer erklärenden Variable
+
+    2.2 Regressionsmodel mit zwei oder mehr Features
+
+3. Testen der Modelle
+
+    3.1 Benutze den Testdatensatz um Preise für die Apartments vorherzusagen
+
+    3.2 Vergleiche deine Prognosen mit den tatsächlichen Preisen mit Hilfe des RMSE
+
+    3.3 Implementiere einen fortgeschrittenen Algorithmus und sende uns dein bestes Ergebnis zu
+
+
+## Beschreibung der Variablen in den Datensätzen
+
+\begin{tabular}{ll}
+\toprule
+                        \textbf{Name} &                 \textbf{Beschreibung} \\
+\midrule
+                           id &                        Identifikationsnummer \\
+                        price &                                        Preis \\
+ neighbourhood\_group\_cleansed &                                 Stadtviertel \\
+                     latitude &                                  Breitengrad \\
+                    longitude &                                   Längengrad \\
+                    bathrooms &                        Anzahl an Badezimmern \\
+              availability\_30 &       Verfügbarkeit in den nächsten 30 Tagen (Tage) \\
+             availability\_365 &               Verfügbarkeit im nächsten Jahr (Tage) \\
+                         beds &                             Anzahl an Betten \\
+                     bedrooms &                          Anzahl Schlafzimmer \\
+          review\_scores\_value &                          Bewertungspunktzahl \\
+                     bed\_type &                        Beschreibung zum Bett \\
+               minimum\_nights &            minimale Anzahl an Übernachtungen \\
+               maximum\_nights &            maximale Anzahl an Übernachtungen \\
+                property\_type &  Art des Angebotes: (Appartment, Zimmer,...) \\
+     is\_business\_travel\_ready &                für Geschäftsreisen geeignet? \\
+                 cleaning\_fee &                              Reinigunsgebühr \\
+                    room\_type &                              Art des Zimmers \\
+                  square\_feet &                         Größe in square feet \\
+              guests\_included &             Sind Gäste im Preis inbegriffen? \\
+\bottomrule
+\end{tabular}

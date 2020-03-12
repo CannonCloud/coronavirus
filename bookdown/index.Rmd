@@ -1,0 +1,82 @@
+--- 
+title: |
+  ![](plots\TA_Logo.png){width=2in}  
+  AirBnB Projektleitfaden
+author: "TechAcademy e.V."
+date: "Wintersemester 2019/20"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Bookdown Version des TechAcademy Leitfadens"
+---
+
+# Wofür ist dieses Dokument gedacht?
+Herzlich willkommen in dem Projekt-Leitfaden für dein TechAcademy *Data Science mit R* Projekt! 
+
+Diese Kurzbeschreibung des Projektes soll dir erste Anhaltspunkte dafür geben, wie du zu einem Ergebnis kommst. Dieses Dokument ist jedoch bewusst keine Schritt-für-Schritt Anleitung, wie du das Projekt durchführen sollst. Uns ist es wichtig, dass du dich in deinem Team selbst mit der Aufgabenstellung beschäftigst und eigene Wege findest, wie du zu einem Ergebnis kommst.  
+
+Da es aber besonders am Anfang nicht ganz offensichtlich sein kann, welche Schritte du durchlaufen sollst, geben wir dir mit diesem Dokument eine kleine Hilfestellung. Es wird sehr oft vorkommen, dass du nicht weiter weißt. Das ist ganz normal und gehört zu dem Lernprozess dazu. Du findest in unserem Handbuch Links zu sehr nützlichen Websites, wo deine Frage vermutlich schon einmal beantwortet wurde. Falls auch googlen dich nicht weiter bringt, stehen dir natürlich die Mentoren per Slack und bei unseren Coding Meetups persönlich zur Verfügung.
+
+Am Schluss dieses Dokumentes findest du eine einseitige Übersicht aller Aufgaben in diesem Projekt.
+Sehe diese Auflistung als Orientierungshilfe, welche Aufgaben noch zu erledigen sind.
+
+## Um was geht das Projekt?
+
+Die Sharing Economy ist in aller Munde: Uber verändert das Taxi-Geschäft grundlegend, in der ganzen Stadt stehen seit neuestem Scooter herum und im Urlaub bucht man sich ein Airbnb und übernachtet in einer fremden Wohnung.
+Nachdem wir uns im letzten Semester ausführlich mit einem Leihfahrrad-Datensatz beschäftigt haben, schauen wir uns in diesem Semester das Geschäftsmodell Airbnb an.
+Genauer gesagt analysieren wir einen Teil eines sehr ausführlichen Datensatzes aller Airbnb Angebote in Berlin.
+Diese Daten wurden im November 2018 "gescraped", also von der Airbnb Homepage ausgelesen.
+Darin findet ihr allerhand nützliche und unnütze Informationen zu den Angeboten.
+
+Schon gespannt, das ganze selbst auszuprobieren? Analog zu einem typischen Data Science Workflow haben wir die Aufgaben in zwei Teile aufgeteilt.
+Als erstes lernst du in einer sogenannten Exploratory Data Analysis (EDA) den Datensatz genauer an und lernst die Variablen und deren Ausprägungen mit Grafiken kennen.
+Für Anfänger ist der Pflichtteil danach abgeschlossen -- doch es lohnt sich, auch den Fortgeschrittenen Teil auszuprobieren.
+In diesem stellst du ein Modell auf, welches die Airbnb-Preise in Berlin möglichst akkurat vorhersagen kann.
+Ein Gefühl für dies bekommst du mit einem einfachen linearen Regressionsmodell, was du nach Belieben erweitern kannst.
+Doch alles der Reihe nach... Was genau ist EDA und was kann ich damit erreichen?
+
+## Was ist das Ziel?
+### Explorative Datenanalyse – Lerne den Datensatz kennen  
+
+Als ersten Schritt werden wir den Datansatz *deskriptiv* kennen lernen. Das heißt, wir nähern uns dem Ziel, indem wir die Daten *beschreiben*.
+Bei Data Science Projekten ist es sehr wichtig, sich zuallererst mit dem Datansatz vertraut zu machen.
+Welche Variablen sind in dem Datensatz enthalten und wie stehen sie im Verhältnis zueinander? Diese Fragen kann man sich sehr gut mit Grafiken beantworten.  
+Wir stellen dir dafür eine Reihe von strukturierten Aufgaben, die du nacheinander bearbeiten wirst. Anfänger, die bisher noch keine oder sehr wenige Statistik-Kenntnisse haben, können nach diesen Aufgaben aufhören -- denn damit sind für Anfänger die Mindestvoraussetzungen erfüllt.
+Jedoch wird es gerade danach spannend.
+Versuche dich also auf jeden Fall trotzdem daran, wenn du noch etwas dazu lernen willst.
+
+Für diesen Abschnitt ist es sinnvoll, die ersten DataCamp Kurse in deinem Curriculum absolviert zu haben. Insbesondere folgende Kurse helfen dir weiter bei der Explorativen Datenanalyse:
+
+\begin{itemize}
+\item \href{https://www.datacamp.com/courses/free-introduction-to-r}{Introduction to R}
+\item \href{https://www.datacamp.com/courses/importing-data-in-r-part-1}{Importing Data in R}
+\item \href{https://www.datacamp.com/courses/data-visualization-with-ggplot2-1}{Data Visualization with ggplot2 (Part 1)}
+\item \href{https://www.datacamp.com/courses/data-manipulation-with-dplyr-in-r}{Data Manipulation with dplyr in R}
+\item \href{https://www.datacamp.com/courses/exploratory-data-analysis}{Exploratory Data Analysis}
+\end{itemize}
+
+### Preisvorhersage – Wende statistische Methoden an 
+
+Dieser Teil ist vornehmlich für etwas fortgeschrittenere Teilnehmer vorgesehen.
+Wenn du jedoch als Anfänger gut durch den ersten Abschnitt gekommen bist, empfehlen wir dir ausdrücklich, auch diesen Teil zu bearbeiten.
+Statistische Modelle sind ein enorm wichtiger Teil des Themenbereiches Data Science.  
+Nachdem wir den Datensatz kennen gelernt haben, können wir in diesem Schritt ein Modell entwickeln, mit dem wir die Airbnb Preise für einzelne Apartments zu unterschiedlichen Zeiten vorhersagen können. 
+Cool, oder?
+Dein Ziel in diesem Abschnitt ist es, ein möglichst akkurates Modell dafür aufzustellen.
+Am Schluss schickst du uns deine Vorhersagen für einen kleinen Teil des Datensatzes, bei dem du den Preis noch nicht weißt.
+Wir vergleichen diese Vorhersagen dann mit den tatsächlichen Preisen und berechnen damit, wie akkurat dein Modell Preise vorhersagt.
+Das beste Modell gewinnt!
+
+Für diesen Abschnitt empfehlen wir dir folgende DataCamp Kurse. Beachte jedoch, dass es noch viele weitere Kurse gibt, die dir eine fortgeschrittenere Lösungsmöglichkeit beibringen.
+
+\begin{itemize}
+\item \href{https://www.datacamp.com/courses/correlation-and-regression}{Correlation and Regression}
+\item \href{https://www.datacamp.com/courses/multiple-and-logistic-regression}{Multiple and Logistic Regression}
+\item \href{https://www.datacamp.com/courses/supervised-learning-in-r-regression}{Supervised Learning in R: Regression}
+\item \href{https://www.datacamp.com/courses/unsupervised-learning-in-r}{Unsupervised Learning in R}
+\item \href{https://www.datacamp.com/courses/machine-learning-toolbox}{Machine Learning Toolbox}
+\end{itemize}
+
+Alles klar? Dann lasse uns gleich starten, nachdem du jetzt einen Überblick über die Aufgaben hast!

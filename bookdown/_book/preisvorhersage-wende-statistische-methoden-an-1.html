@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Kapitel 4 Preisvorhersage – Wende statistische Methoden an |  AirBnB Projektleitfaden</title>
+  <meta name="description" content="Bookdown Version des TechAcademy Leitfadens" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Kapitel 4 Preisvorhersage – Wende statistische Methoden an |  AirBnB Projektleitfaden" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Bookdown Version des TechAcademy Leitfadens" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Kapitel 4 Preisvorhersage – Wende statistische Methoden an |  AirBnB Projektleitfaden" />
+  
+  <meta name="twitter:description" content="Bookdown Version des TechAcademy Leitfadens" />
+  
+
+<meta name="author" content="TechAcademy e.V." />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"/>
+<link rel="next" href="noch-fragen.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">TechAcademy e.V. | Data Science mit R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Wofür ist dieses Dokument gedacht?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#um-was-geht-das-projekt"><i class="fa fa-check"></i><b>1.1</b> Um was geht das Projekt?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#was-ist-das-ziel"><i class="fa fa-check"></i><b>1.2</b> Was ist das Ziel?</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#explorative-datenanalyse-lerne-den-datensatz-kennen"><i class="fa fa-check"></i><b>1.2.1</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#preisvorhersage-wende-statistische-methoden-an"><i class="fa fa-check"></i><b>1.2.2</b> Preisvorhersage – Wende statistische Methoden an</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="coronavirus-projekt.html"><a href="coronavirus-projekt.html"><i class="fa fa-check"></i><b>2</b> Coronavirus Projekt</a></li>
+<li class="chapter" data-level="3" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><i class="fa fa-check"></i><b>3</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a><ul>
+<li class="chapter" data-level="3.1" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#datenimport--bereinigung--transformation-und-lineplot-calendar"><i class="fa fa-check"></i><b>3.1</b> Datenimport, -bereinigung, -transformation und Lineplot (Calendar)</a></li>
+<li class="chapter" data-level="3.2" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#visualisiere-individuelle-airbnb-angebote-listings"><i class="fa fa-check"></i><b>3.2</b> Visualisiere individuelle Airbnb-Angebote (listings)</a></li>
+<li class="chapter" data-level="3.3" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#merge-zwei-datensätze-anhand-einer-id-listings-reviews"><i class="fa fa-check"></i><b>3.3</b> Merge zwei Datensätze anhand einer ID (listings, reviews)</a></li>
+<li class="chapter" data-level="3.4" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#geo-daten-mit-karten-visualisieren-listings_reviews"><i class="fa fa-check"></i><b>3.4</b> Geo-Daten mit Karten visualisieren (listings_reviews)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html"><i class="fa fa-check"></i><b>4</b> Preisvorhersage – Wende statistische Methoden an</a><ul>
+<li class="chapter" data-level="4.1" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#untersuche-die-korrelation-zwischen-den-variablen-näher-train"><i class="fa fa-check"></i><b>4.1</b> Untersuche die Korrelation zwischen den Variablen näher (train)</a></li>
+<li class="chapter" data-level="4.2" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#erste-vorhersagen-mit-einfachen-regressionsmodellen-train"><i class="fa fa-check"></i><b>4.2</b> Erste Vorhersagen mit einfachen Regressionsmodellen (train)</a></li>
+<li class="chapter" data-level="4.3" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#von-training-zu-testen-treffe-vorhersagen"><i class="fa fa-check"></i><b>4.3</b> Von Training zu Testen – Treffe Vorhersagen</a></li>
+<li class="chapter" data-level="4.4" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#wende-fortgeschrittene-machine-learning-algorithmen-an"><i class="fa fa-check"></i><b>4.4</b> Wende fortgeschrittene Machine Learning-Algorithmen an</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="noch-fragen.html"><a href="noch-fragen.html"><i class="fa fa-check"></i><b>5</b> Noch Fragen?</a></li>
+<li class="chapter" data-level="6" data-path="anhang.html"><a href="anhang.html"><i class="fa fa-check"></i><b>6</b> Anhang</a><ul>
+<li class="chapter" data-level="6.1" data-path="anhang.html"><a href="anhang.html#aufgaben-checkliste-für-das-airbnb-data-science-projekt"><i class="fa fa-check"></i><b>6.1</b> Aufgaben-Checkliste für das Airbnb Data Science Projekt</a></li>
+<li class="chapter" data-level="6.2" data-path="anhang.html"><a href="anhang.html#beschreibung-der-variablen-in-den-datensätzen"><i class="fa fa-check"></i><b>6.2</b> Beschreibung der Variablen in den Datensätzen</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><img src="plots/TA_Logo.png" style="width:2in" /><br />
+AirBnB Projektleitfaden</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="preisvorhersage-wende-statistische-methoden-an-1" class="section level1">
+<h1><span class="header-section-number">Kapitel 4</span> Preisvorhersage – Wende statistische Methoden an</h1>
+<p>Im vorherigen Teil hast du ein Gefühl für den Datensatz bekommen. Du weißt jetzt, welche Variablen enthalten sind und kennst ein paar charakteristische Eigenschaften des Datensatzes. Noch haben wir den Datensatz aber nur visualisiert. In diesem Abschnitt gehen wir einen Schritt weiter und wenden statistische Methoden an, um den Preis von einzelnen Airbnb Apartments möglichst genau vorherzusagen.</p>
+<p>Um dein Modell am Schluss vergleichen zu können, verwenden wir eine einheitliche Metrik, nach der wir die Preisvorhersagen auf Genauigkeit überprüfen können.
+In unserem Fall ist dies der Root Mean Squared Error (<span class="math inline">\(RMSE\)</span>), also die Wurzel der durchschnittlich quadrierten Differenz zwischen dem vorhergesagten (<span class="math inline">\(\hat{y}_i\)</span>) und tatsächlichen Wert (<span class="math inline">\(y_i\)</span>):</p>
+
+<p>Je näher der <span class="math inline">\(RMSE\)</span> an 0 ist, desto besser sagt dein Modell die Preise vorher.
+Dein Ziel ist es im Folgenden also den <span class="math inline">\(RMSE\)</span> deiner verschiedenen Modelle durch kontinuierliche Verbesserungen möglichst weit zu reduzieren.</p>
+<p>Wir nutzen für den folgenden Teil drei verschiedene Datensätze, welche du im Unterordner <em>Full Data Set</em> findest.
+Diese basieren auf einem deutlich umfangreicheren Datensatz, der insgesamt 96 Variablen für jedes Apartment enthält.
+Wir haben bereits den Test/Train/Validation split der Daten vorgenommen, damit jede Gruppe mit der gleichen Aufteilung arbeitet.
+Hier eine kurze Beschreibung, wofür du die Datensätze benötigst:</p>
+<ul>
+<li> (60 %): Diesen Trainings-Datensatz verwendest du, um dein Modell zu trainieren. Das Modell lernt also die Zusammenhänge zwischen den Variablen dadurch kennen.</li>
+<li> (30 %): Mit diesem Test-Datensatz kannst du testen, wie gut dein Modell den Preis mit Hilfe von bisher nicht gesehenen Daten vorhersagt. Dabei erkennst du zum Beispiel under-/overfitting.</li>
+<li> (10 %): In diesem Validation-Datensatz haben wir die Variable <code>price</code> entfernt. Du wendest am Schluss dein bestes Modell darauf an und schickst uns deine Vorhersagen für <code>price</code>. Wir vergleichen diese dann mit den tatsächlichen (nur uns bekannten) Werten mit Hilfe des <span class="math inline">\(RMSE\)</span> und küren nach Projektabgabe das beste Modell über alle Gruppen hinweg.</li>
+</ul>
+<p>Beachte, dass in diesen drei Datensätzen wieder einige Bereinigungen notwendig sind.
+So sind zum Beispiel alle Preis-Variablen mit einem $-Zeichen versehen.
+Wir müssen diese entfernen, damit R die Variablen als numerisch interpretieren kann und wir diese für die folgenden Modelle verwenden können. Behalte immer im Hinterkopf, dass du alle Transformationen auf alle drei Datensätze anwenden musst, da du sonst dein trainiertes Modell nicht auf den Test- sowie Validierungsdatensatz anwenden kannst.</p>
+<div id="untersuche-die-korrelation-zwischen-den-variablen-näher-train" class="section level2">
+<h2><span class="header-section-number">4.1</span> Untersuche die Korrelation zwischen den Variablen näher (train)</h2>
+<p>Lade zuerst den <code>train.csv</code> Datensatz aus dem Ordner <em>Full Data Set</em> in deinen Workspace.
+Schaue dir jetzt die Variablennamen und die ersten Einträge an um zu entscheiden, welche Daten für die Vorhersage des Preises nützlich sein können.
+Wähle diese (beschränke dich zuerst auf nicht mehr als 20 Variablen) plus <code>price</code> aus und speichere diese in einem neuen data.frame.</p>
+<p>Wie stehen einzelne Variablen miteinander in Verbindung?
+Sprich inwiefern korrelieren die Variablen des Datensatzes miteinander?
+Das herauszufinden ist enorm wichtig für die Entscheidung, welches Modell du später anwenden kannst.<br />
+Ein guter Anfang ist es, eine Korrelationsmatrix zu erstellen.
+Ein Teil dafür ist die Funktion <code>cor()</code> aus dem <code>base</code> package.
+Selektiere alle numerische Variablen in deinem Datensatzes mit Hilfe von <code>sapply()</code> und erstelle eine Korrelationsmatrix.</p>
+<p>Einen sehr praktischen Plot zur Visualisierung von Zusammenhängen zwischen vielen Variablen liefert das Package <code>GGally</code> mit der Funktion <code>ggpairs()</code>.
+Wähle die vier Variablen (und <code>price</code>) aus, die deiner Meinung nach am meisten den Preis beeinflussen und erstelle einen ggpairs-Plot.
+Beachte hierbei, dass der Plot schnell unlesbar wird und lange zum Erstellen braucht, sobald du deutlich mehr als fünf Variablen plottest.</p>
+<embed src="plots/5_1_ggpairs.pdf" width="100%" type="application/pdf" />
+<p>Welche deiner untersuchten Variablen korreliert am meisten mit dem Preis und welche scheinen eher unabhängig vom Preis zu sein?
+Du hast jetzt einen ersten Eindruck, welche Variablen für dein Modell wichtig werden könnnten.
+Kommen wir also zu deinem ersten Preis-Vorhersage-Modell!</p>
+</div>
+<div id="erste-vorhersagen-mit-einfachen-regressionsmodellen-train" class="section level2">
+<h2><span class="header-section-number">4.2</span> Erste Vorhersagen mit einfachen Regressionsmodellen (train)</h2>
+<p>Jetzt kannst du dich mit deinen Statistik-Kenntnissen austoben:
+Du benötigst jetzt ein Verfahren, wie du den Preis eines Airbnb Apartments an einem bestimmten Tag vorhersagen kannst.<br />
+Eine erste sehr einfache Herangehensweise wäre den Durchschnitt der Nachfrage als erste Vorhersage zu verwenden. Ziemlich sicher ist das jedoch nicht die beste Vorhersage.
+Deine vorhergesagter Preis wäre in diesem Fall über alle Tage gleich und würde alle Faktoren, die den Preis beeinflussen, außer Acht lassen.</p>
+<p>Schon einmal was von einer linearen Regression gehört? Das wäre ein deutlich besserer Ansatz.
+Jetzt kannst du deine Statistik-Skills ausspielen.
+Stelle zuerst ein Modell mit der abhängigen Variable <code>price</code> auf.
+In der vorherigen Aufgabe hast du unterschiedliche Variablen untersucht.
+Suche dir jetzt diejenige Variable mit der höchsten Korrelation zum Preis aus und verwende diese als einzige unabhängige Variable.</p>
+<p>Dein erstes Regressionsmodell könnte zum Beispiel so aussehen:</p>
+
+<p>In R kannst du eine einfache lineare Regression mit der Funktion <span class="math inline">\(lm()\)</span> implementieren. Die Ergebnisse davon gibst du dann mit der <span class="math inline">\(summary()\)</span> Funktion aus.</p>
+<p>Hat deine unabhängige Variable einen statistisch signifikanten Einfluss auf den Apartment-Preis?
+Vermutlich ja, denn wir haben als einzige die am höchsten zum Preis korrelierte Variable ausgewählt.
+Wenn wir jedoch bei diesem sehr vereinfachten Modell bleiben, begehen wir einen typischen Fehler:
+Den sogenannten Omitted Variable Bias (OVB).
+Grob vereinfacht gesprochen vernachlässigen wir (im Statistik-Jargon: kontrollieren nicht für) Variablen, die einen signifikanten Einfluss auf die abhängige Variable haben.
+Man könnte vermuten, dass andere Einflussfaktoren auch eine große Rolle bei der Preisbiildung haben.
+Wenn wir diese also nicht mit aufnehmen, ist die Schätzung des Effektes von <span class="math inline">\(bedrooms\)</span> verzerrt und damit schlecht zu gebrauchen.
+In diesem Fall ist das vorerst kein großes Problem für uns, da wir nicht an kausalen Effekten, sondern aussließlich an einer möglichst guten Vorhersage interessiert sind.
+Deinem Statistik-Prof würden bei so einem Modell ziemlich sicher die Haare zu Berge stehen.
+Nichtsdestotrotz wird dieses Modell mit nur einer einzigen erklärenden Variable den Preis nicht unbedingt gut vorhersagen.</p>
+<p>Eine Lösungsmöglichkeit ist, die vernachlässigten Variablen einfach mit in das Modell aufzunehmen –- wie praktisch, dass diese auch schon in dem Datensatz enthalten sind. Stellen wir also ein etwas umfangreicheres Modell auf, das die noch eine weitere Variable mit aufnimmt:</p>
+
+<p>Vergleiche nun die Ergebnisse der beiden Modelle.
+Erklärt das umfangreichere Modell einen höheren Anteil der Varianz im Preis?
+Sprich welches Modell weist dem höheren Wert für das Bestimmtheitsmaß <span class="math inline">\(R^2\)</span> aus?
+Tipp: Solche LaTeX-Tabellen kannst du einfach mit dem <code>stargazer</code> Package in dein RMarkdown Dokument mit aufnehmen.</p>
+
+</div>
+<div id="von-training-zu-testen-treffe-vorhersagen" class="section level2">
+<h2><span class="header-section-number">4.3</span> Von Training zu Testen – Treffe Vorhersagen</h2>
+<p>Jetzt hast du dein erstes Modell mit dem Trainings-Datensatz <em>trainiert</em>.
+Doch wie gut geht das Modell mit Daten um, die es noch nicht gesehen hat?
+Das ist ein sehr wichtiger Test um die Qualität deines Modells zu bewerten.</p>
+<p>Hat dein Modell nur die vorhandenen Muster im Trainings-Datensatz “auswendig” gelernt?
+Dann wären die Zusammenhänge aus dem Trainings-Datensatz nicht übertragbar auf den Test-Datensatz.
+Beim sogenannten Overfitting hat das Modell zu nah am Trainings-Datensatz gelernt und liefert deshalb schlechte Vorhersagen bei unbekannten Daten –- zum Beispiel in deinem Test- und Validierungs-Datensatz.<br />
+Auf der andern Seite gibt es auch das Problem Underfitting: Dein Modell hat die tatsächlichen Zusammenhänge der Daten nicht ausreichend gelernt und sagt deshalb in dem Test-Datensatz schlecht voraus.
+Es gilt also, die goldene Mitte zwischen den beiden Problemen zu finden.</p>
+<p>Jetzt wird die Unterscheidung zwischen Trainings- und Testdatensatz wichtig. Zur Erinnerung: wir nutzen <code>train</code>, um ein Modell zu <strong>trainieren</strong> und <code>test</code>, um die Qualität unseres Modells letztendlich zu <strong>testen</strong>.</p>
+<p>Lade nun zusätzlich zu dem Datensatz <code>train</code>, den du bereits vorher verwendet hast, den Datensatz <code>test</code>.
+Um nun dein Modell an bisher ungesehenen Daten zu testen, kannst du das Modell auf den <code>test</code> Datensatz anwenden.
+Nutze dafür die Funktion predict:</p>
+<p>Damit hast du einen Vektor mit allen Preisvorhersagen für den <code>test</code> Datensatz erstellt.
+Diesen kannst du jetzt mit den tatsächlichen Werten für <code>price</code> aus <code>test</code> vergleichen.
+Um eine einheitliche Vergleichsmetrik zu verwenden, nutze bitte folgende Funktion zur Messung deiner Vorhersagegenauigkeit.</p>
+<p>Vergleiche nun beide Regressionsmodelle.
+Hat das umfangreichere Modell bessere Vorhersagegenauigkeit, also einen niedrigeren <span class="math inline">\(RMSE\)</span>?
+Jetzt hast du einen Benckmark für deine fortgeschritteneren Modelle, den es im nächsten Teil zu schlagen gilt.</p>
+</div>
+<div id="wende-fortgeschrittene-machine-learning-algorithmen-an" class="section level2">
+<h2><span class="header-section-number">4.4</span> Wende fortgeschrittene Machine Learning-Algorithmen an</h2>
+<p>Nachdem du jetzt eine erste Vorhersage mit Hilfe eines einfachen Regressionsmodells erstellt und getestet hast, kannst du dich jetzt an fortgeschrittenere Methoden herantasten.
+Das Ziel ist immer noch, einen möglichst niedrigen <span class="math inline">\(RMSE\)</span> beim Anwenden des Modells auf dem <code>test</code> Datensatz zu erhalten.
+Suche dir jetzt mindestens einen anderen Algorithmus heraus und überprüfe letztendlich, ob du dadurch eine akkuratere Vorhersage (ausgedrückt durch niedrigeren <span class="math inline">\(RMSE\)</span>) erhältst.
+Inspirationen dazu findest du bei den fortgeschrittenen DataCamp-Kursen, welche am Anfang des Leitfadens aufgelistet sind.
+Dir sind dabei keine Grenzen gesetzt – du kannst die Regression durch bestimmte Verfahren verfeinern (z.B. LASSO) oder gleich ein Random Forest Modell oder ein Neuronales Netzwerk aufstellen.
+Es ist meistens eine gute Idee, sich kurz die Funktionsweise der jeweiligen Algorithmen in Erinnerung zu rufen und zu überlegen, ob diese Methodik in diesem Fall bei einer kontinuierlichen Vorhersagevariable Sinn macht.</p>
+<p>An dieser Stelle ist ein Hinweis angebracht: Unser Datensatz hat über viele Variablen teilweise einen substantiellen Teil an fehlenden Beobachtungen (<code>NA</code>).
+Einige Machine Learning Algorithmen verlangen einen vollständigen Datensatz ohne Missing Values, während andere mit einer kleineren Anzahl gut zurecht kommen.
+Überprüfe also zuerst, ob du die Missing Values durch ein bestimmtes Verfahren imputieren kannst.
+Welche Methode dafür am besten geeignet ist, hängt stark von deinem Vorhersage-Algorithmus ab.</p>
+<p>Zudem kannst du einen spürbaren Zugewinn an Vorhersagekraft erhalten, indem du bestehende Variablen modifizierst oder neue Variablen aus dem Datensatz generierst (“feature engineering”).
+Zum Beispiel könnten wir uns vorstellen, dass die Distanz eines Apartments zum Stadtzentrum einen deutlichen Einfluss auf den Preis hat.
+Diese Variable ist jedoch nicht in unserem Datensatz enthalen.
+Du kannst jedoch eine einfache Funktion schreiben, die mit Hilfe der zwei Koordinaten-Variablen die Distanz zum Zentrum Berlins berechnet und diese als neue Variable an den Datensatz anhängt.</p>
+<p>Vergleiche immer den <span class="math inline">\(RMSE\)</span> deiner fortgeschrittenen Modelle unterienander, sowie im Vegleich zu dem Benckmark Regressionsmodell.</p>
+<p>Du hast dein bestes Modell gefunden? Dann wende wie oben die Funktion <code>predict()</code> mit deinem Gewinnermodell an – dieses mal jedoch auf den Validierungs-Datensatz <code>val</code>.</p>
+<p>Schicke in Anhang deiner Projektabgabe einen .csv Datensatz in folgendem Format mit den beiden einzigen Variablen <code>id</code> und <code>predicted_price</code> mit.</p>
+
+<p>Dies erreichst du, indem du die beiden Vektoren <code>id</code> und <code>predicted_price</code> aneinanderfügst und als .csv Datei abspeicherst.</p>
+<p>Damit hast du alle Aufgaben bearbeitet!
+Wir hoffen du hattest Spaß beim Programmieren und hast einige spannende Methoden in R gelernt.
+Vergesse nicht, dein PDF Dokument und die eben generierte .csv Datei vor der Deadline an unsere Projektabgabe-Email-Adresse zu schicken.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="noch-fragen.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["output.pdf", "output.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

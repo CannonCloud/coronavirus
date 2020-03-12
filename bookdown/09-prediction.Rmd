@@ -1,0 +1,219 @@
+# Preisvorhersage – Wende statistische Methoden an
+
+Im vorherigen Teil hast du ein Gefühl für den Datensatz bekommen. Du weißt jetzt, welche Variablen enthalten sind und kennst ein paar charakteristische Eigenschaften des Datensatzes. Noch haben wir den Datensatz aber nur visualisiert. In diesem Abschnitt gehen wir einen Schritt weiter und wenden statistische Methoden an, um den Preis von einzelnen Airbnb Apartments möglichst genau vorherzusagen.
+
+Um dein Modell am Schluss vergleichen zu können, verwenden wir eine einheitliche Metrik, nach der wir die Preisvorhersagen auf Genauigkeit überprüfen können.
+In unserem Fall ist dies der Root Mean Squared Error ($RMSE$), also die Wurzel der durchschnittlich quadrierten Differenz zwischen dem vorhergesagten ($\hat{y}_i$) und tatsächlichen Wert ($y_i$):
+
+\begin{center}
+$RMSE = \sqrt{\frac{1}{N}\sum_{i=1}^{N}{(\hat{y}_i-y_i)^2}}$
+\end{center}
+
+Je näher der $RMSE$ an 0 ist, desto besser sagt dein Modell die Preise vorher.
+Dein Ziel ist es im Folgenden also den $RMSE$ deiner verschiedenen Modelle durch kontinuierliche Verbesserungen möglichst weit zu reduzieren.
+
+Wir nutzen für den folgenden Teil drei verschiedene Datensätze, welche du im Unterordner *Full Data Set* findest.
+Diese basieren auf einem deutlich umfangreicheren Datensatz, der insgesamt 96 Variablen für jedes Apartment enthält.
+Wir haben bereits den Test/Train/Validation split der Daten vorgenommen, damit jede Gruppe mit der gleichen Aufteilung arbeitet.
+Hier eine kurze Beschreibung, wofür du die Datensätze benötigst:
+
+* \textbf{train.csv} (60 \%): Diesen Trainings-Datensatz verwendest du, um dein Modell zu trainieren. Das Modell lernt also die Zusammenhänge zwischen den Variablen dadurch kennen.
+* \textbf{test.csv} (30 \%): Mit diesem Test-Datensatz kannst du testen, wie gut dein Modell den Preis mit Hilfe von bisher nicht gesehenen Daten vorhersagt. Dabei erkennst du zum Beispiel under-/overfitting.
+* \textbf{val.csv} (10 \%): In diesem Validation-Datensatz haben wir die Variable `price` entfernt. Du wendest am Schluss dein bestes Modell darauf an und schickst uns deine Vorhersagen für `price`. Wir vergleichen diese dann mit den tatsächlichen (nur uns bekannten) Werten mit Hilfe des $RMSE$ und küren nach Projektabgabe das beste Modell über alle Gruppen hinweg.
+
+Beachte, dass in diesen drei Datensätzen wieder einige Bereinigungen notwendig sind.
+So sind zum Beispiel alle Preis-Variablen mit einem \$-Zeichen versehen.
+Wir müssen diese entfernen, damit R die Variablen als numerisch interpretieren kann und wir diese für die folgenden Modelle verwenden können. Behalte immer im Hinterkopf, dass du alle Transformationen auf alle drei Datensätze anwenden musst, da du sonst dein trainiertes Modell nicht auf den Test- sowie Validierungsdatensatz anwenden kannst.
+
+## Untersuche die Korrelation zwischen den Variablen näher (train)
+
+Lade zuerst den `train.csv` Datensatz aus dem Ordner *Full Data Set* in deinen Workspace.
+Schaue dir jetzt die Variablennamen und die ersten Einträge an um zu entscheiden, welche Daten für die Vorhersage des Preises nützlich sein können.
+Wähle diese (beschränke dich zuerst auf nicht mehr als 20 Variablen) plus `price` aus und speichere diese in einem neuen data.frame.
+
+Wie stehen einzelne Variablen miteinander in Verbindung?
+Sprich inwiefern korrelieren die Variablen des Datensatzes miteinander?
+Das herauszufinden ist enorm wichtig für die Entscheidung, welches Modell du später anwenden kannst.  
+Ein guter Anfang ist es, eine Korrelationsmatrix zu erstellen.
+Ein Teil dafür ist die Funktion `cor()` aus dem `base` package.
+Selektiere alle numerische Variablen in deinem Datensatzes mit Hilfe von `sapply()` und erstelle eine Korrelationsmatrix.
+
+Einen sehr praktischen Plot zur Visualisierung von Zusammenhängen zwischen vielen Variablen liefert das Package `GGally` mit der Funktion `ggpairs()`.
+Wähle die vier Variablen (und `price`) aus, die deiner Meinung nach am meisten den Preis beeinflussen und erstelle einen ggpairs-Plot.
+Beachte hierbei, dass der Plot schnell unlesbar wird und lange zum Erstellen braucht, sobald du deutlich mehr als fünf Variablen plottest.
+
+```{r ggpairs, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("plots/5_1_ggpairs.pdf")
+```
+
+Welche deiner untersuchten Variablen korreliert am meisten mit dem Preis und welche scheinen eher unabhängig vom Preis zu sein?
+Du hast jetzt einen ersten Eindruck, welche Variablen für dein Modell wichtig werden könnnten.
+Kommen wir also zu deinem ersten Preis-Vorhersage-Modell!
+
+## Erste Vorhersagen mit einfachen Regressionsmodellen (train)
+
+Jetzt kannst du dich mit deinen Statistik-Kenntnissen austoben:
+Du benötigst jetzt ein Verfahren, wie du den Preis eines Airbnb Apartments an einem bestimmten Tag vorhersagen kannst.  
+Eine erste sehr einfache Herangehensweise wäre den Durchschnitt der Nachfrage als erste Vorhersage zu verwenden. Ziemlich sicher ist das jedoch nicht die beste Vorhersage.
+Deine vorhergesagter Preis wäre in diesem Fall über alle Tage gleich und würde alle Faktoren, die den Preis beeinflussen, außer Acht lassen.
+
+Schon einmal was von einer linearen Regression gehört? Das wäre ein deutlich besserer Ansatz.
+Jetzt kannst du deine Statistik-Skills ausspielen.
+Stelle zuerst ein Modell mit der abhängigen Variable `price` auf.
+In der vorherigen Aufgabe hast du unterschiedliche Variablen untersucht.
+Suche dir jetzt diejenige Variable mit der höchsten Korrelation zum Preis aus und verwende diese als einzige unabhängige Variable.
+
+Dein erstes Regressionsmodell könnte zum Beispiel so aussehen:
+
+\begin{center} $price = \beta_0 + \beta_1 bedrooms + \epsilon$ \end{center}
+
+In R kannst du eine einfache lineare Regression mit der Funktion $lm()$ implementieren. Die Ergebnisse davon gibst du dann mit der $summary()$ Funktion aus.
+
+Hat deine unabhängige Variable einen statistisch signifikanten Einfluss auf den Apartment-Preis?
+Vermutlich ja, denn wir haben als einzige die am höchsten zum Preis korrelierte Variable ausgewählt.
+Wenn wir jedoch bei diesem sehr vereinfachten Modell bleiben, begehen wir einen typischen Fehler:
+Den sogenannten Omitted Variable Bias (OVB).
+Grob vereinfacht gesprochen vernachlässigen wir (im Statistik-Jargon: kontrollieren nicht für) Variablen, die einen signifikanten Einfluss auf die abhängige Variable haben.
+Man könnte vermuten, dass andere Einflussfaktoren auch eine große Rolle bei der Preisbiildung haben.
+Wenn wir diese also nicht mit aufnehmen, ist die Schätzung des Effektes von $bedrooms$ verzerrt und damit schlecht zu gebrauchen.
+In diesem Fall ist das vorerst kein großes Problem für uns, da wir nicht an kausalen Effekten, sondern aussließlich an einer möglichst guten Vorhersage interessiert sind.
+Deinem Statistik-Prof würden bei so einem Modell ziemlich sicher die Haare zu Berge stehen.
+Nichtsdestotrotz wird dieses Modell mit nur einer einzigen erklärenden Variable den Preis nicht unbedingt gut vorhersagen.  
+
+Eine Lösungsmöglichkeit ist, die vernachlässigten Variablen einfach mit in das Modell aufzunehmen –- wie praktisch, dass diese auch schon in dem Datensatz enthalten sind. Stellen wir also ein etwas umfangreicheres Modell auf, das die noch eine weitere Variable mit aufnimmt:
+
+\begin{center} $price = \beta_0 + \beta_1 bedrooms + \beta_2 cleaning\_fee + \epsilon$ \end{center}  
+
+Vergleiche nun die Ergebnisse der beiden Modelle.
+Erklärt das umfangreichere Modell einen höheren Anteil der Varianz im Preis?
+Sprich welches Modell weist dem höheren Wert für das Bestimmtheitsmaß $R^2$ aus?
+Tipp: Solche LaTeX-Tabellen kannst du einfach mit dem `stargazer` Package in dein RMarkdown Dokument mit aufnehmen.
+
+\begin{table}[!htbp] \centering 
+  \caption{Model Summary for Two Simple Linear Regression Models} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{price} \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ bedrooms & 35.317$^{***}$ & 28.715$^{***}$ \\ 
+  & (0.594) & (0.642) \\ 
+  & & \\ 
+ cleaning\_fee &  & 0.576$^{***}$ \\ 
+  &  & (0.017) \\ 
+  & & \\ 
+ Constant & 18.272$^{***}$ & 13.313$^{***}$ \\ 
+  & (0.790) & (0.864) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 13,488 & 9,245 \\ 
+R$^{2}$ & 0.208 & 0.331 \\ 
+Adjusted R$^{2}$ & 0.208 & 0.331 \\ 
+Residual Std. Error & 45.115 (df = 13486) & 39.777 (df = 9242) \\ 
+F Statistic & 3,538.208$^{***}$ (df = 1; 13486) & 2,283.658$^{***}$ (df = 2; 9242) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+
+## Von Training zu Testen – Treffe Vorhersagen
+
+Jetzt hast du dein erstes Modell mit dem Trainings-Datensatz *trainiert*.
+Doch wie gut geht das Modell mit Daten um, die es noch nicht gesehen hat?
+Das ist ein sehr wichtiger Test um die Qualität deines Modells zu bewerten.  
+
+Hat dein Modell nur die vorhandenen Muster im Trainings-Datensatz "auswendig" gelernt?
+Dann wären die Zusammenhänge aus dem Trainings-Datensatz nicht übertragbar auf den Test-Datensatz.
+Beim sogenannten Overfitting hat das Modell zu nah am Trainings-Datensatz gelernt und liefert deshalb schlechte Vorhersagen bei unbekannten Daten –- zum Beispiel in deinem Test- und Validierungs-Datensatz.  
+Auf der andern Seite gibt es auch das Problem Underfitting: Dein Modell hat die tatsächlichen Zusammenhänge der Daten nicht ausreichend gelernt und sagt deshalb in dem Test-Datensatz schlecht voraus.
+Es gilt also, die goldene Mitte zwischen den beiden Problemen zu finden.  
+
+Jetzt wird die Unterscheidung zwischen Trainings- und Testdatensatz wichtig. Zur Erinnerung: wir nutzen `train`, um ein Modell zu **trainieren** und `test`, um die Qualität unseres Modells letztendlich zu **testen**.
+
+Lade nun zusätzlich zu dem Datensatz `train`, den du bereits vorher verwendet hast, den Datensatz `test`.
+Um nun dein Modell an bisher ungesehenen Daten zu testen, kannst du das Modell auf den `test` Datensatz anwenden.
+Nutze dafür die Funktion predict:
+
+```{r, eval = FALSE}
+predicted_price <- predict(your_saved_model, your_test_data_frame)
+```
+
+Damit hast du einen Vektor mit allen Preisvorhersagen für den `test` Datensatz erstellt.
+Diesen kannst du jetzt mit den tatsächlichen Werten für `price` aus `test` vergleichen.
+Um eine einheitliche Vergleichsmetrik zu verwenden, nutze bitte folgende Funktion zur Messung deiner Vorhersagegenauigkeit.
+
+```{r, eval = FALSE}
+# Function that returns Root Mean Squared Error while ignoring NAs
+rmse <- function(actual, predicted)
+{
+  sqrt(mean((predicted - actual)^2, na.rm = TRUE))
+}
+```
+
+Vergleiche nun beide Regressionsmodelle.
+Hat das umfangreichere Modell bessere Vorhersagegenauigkeit, also einen niedrigeren $RMSE$?
+Jetzt hast du einen Benckmark für deine fortgeschritteneren Modelle, den es im nächsten Teil zu schlagen gilt.
+
+## Wende fortgeschrittene Machine Learning-Algorithmen an
+
+Nachdem du jetzt eine erste Vorhersage mit Hilfe eines einfachen Regressionsmodells erstellt und getestet hast, kannst du dich jetzt an fortgeschrittenere Methoden herantasten.
+Das Ziel ist immer noch, einen möglichst niedrigen $RMSE$ beim Anwenden des Modells auf dem `test` Datensatz zu erhalten.
+Suche dir jetzt mindestens einen anderen Algorithmus heraus und überprüfe letztendlich, ob du dadurch eine akkuratere Vorhersage (ausgedrückt durch niedrigeren $RMSE$) erhältst.
+Inspirationen dazu findest du bei den fortgeschrittenen DataCamp-Kursen, welche am Anfang des Leitfadens aufgelistet sind.
+Dir sind dabei keine Grenzen gesetzt -- du kannst die Regression durch bestimmte Verfahren verfeinern (z.B. LASSO) oder gleich ein Random Forest Modell oder ein Neuronales Netzwerk aufstellen.
+Es ist meistens eine gute Idee, sich kurz die Funktionsweise der jeweiligen Algorithmen in Erinnerung zu rufen und zu überlegen, ob diese Methodik in diesem Fall bei einer kontinuierlichen Vorhersagevariable Sinn macht.
+
+An dieser Stelle ist ein Hinweis angebracht: Unser Datensatz hat über viele Variablen teilweise einen substantiellen Teil an fehlenden Beobachtungen (`NA`).
+Einige Machine Learning Algorithmen verlangen einen vollständigen Datensatz ohne Missing Values, während andere mit einer kleineren Anzahl gut zurecht kommen.
+Überprüfe also zuerst, ob du die Missing Values durch ein bestimmtes Verfahren imputieren\footnote{"imputieren" bedeutet, dass du deine `NA` durch einen Wert ersetzt, der auf Basis der restlichen Werte oder den anderen Variablen berechnet wird. So kannst du zum Beispiel den fehlenden Wert durch eine Regression auf die restlichen Variablen vorhersagen} kannst.
+Welche Methode dafür am besten geeignet ist, hängt stark von deinem Vorhersage-Algorithmus ab.
+
+Zudem kannst du einen spürbaren Zugewinn an Vorhersagekraft erhalten, indem du bestehende Variablen modifizierst oder neue Variablen aus dem Datensatz generierst ("feature engineering").
+Zum Beispiel könnten wir uns vorstellen, dass die Distanz eines Apartments zum Stadtzentrum einen deutlichen Einfluss auf den Preis hat.
+Diese Variable ist jedoch nicht in unserem Datensatz enthalen.
+Du kannst jedoch eine einfache Funktion schreiben, die mit Hilfe der zwei Koordinaten-Variablen die Distanz zum Zentrum Berlins berechnet und diese als neue Variable an den Datensatz anhängt.
+
+Vergleiche immer den $RMSE$ deiner fortgeschrittenen Modelle unterienander, sowie im Vegleich zu dem Benckmark Regressionsmodell. 
+
+Du hast dein bestes Modell gefunden? Dann wende wie oben die Funktion `predict()` mit deinem Gewinnermodell an -- dieses mal jedoch auf den Validierungs-Datensatz `val`.
+
+Schicke in Anhang deiner Projektabgabe einen .csv Datensatz in folgendem Format mit den beiden einzigen Variablen `id` und `predicted_price` mit.
+
+\begin{table}[!htbp] \centering 
+  \caption{Submission Format} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} ccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+id & predicted\_price \\ 
+\hline \\[-1.8ex] 
+2015 & $113$ \\ 
+2695 & $9$ \\ 
+3176 & $137$ \\ 
+\vdots & \vdots \\
+28089647 & $25$ \\ 
+5012107 & $78$ \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
+
+Dies erreichst du, indem du die beiden Vektoren `id` und `predicted_price` aneinanderfügst und als .csv Datei abspeicherst.
+
+```{r, eval = FALSE}
+submission <- cbind(val$id, predicted_price_val)
+write.csv(submission, "submission_<<INSERT TEAM NAME HERE>>.csv", row.names=FALSE)
+```
+
+Damit hast du alle Aufgaben bearbeitet!
+Wir hoffen du hattest Spaß beim Programmieren und hast einige spannende Methoden in R gelernt.
+Vergesse nicht, dein PDF Dokument und die eben generierte .csv Datei vor der Deadline an unsere Projektabgabe-Email-Adresse zu schicken.
+
+# Noch Fragen?
+
+Du kommst nicht weiter? Willst dein Modell noch weiter verbessern, weißt aber nicht genau wie? Oder dir fällt gerade nicht ein, wie man etwas bestimmtes im Code umsetzt? Schaue dir noch einmal unser Handbuch an. Dort findest du hilfreiche Hinweise, wie du in diesem Fall weiter verfahren und wo du nach einer Lösung für deine Fragestellung suchen kannst.

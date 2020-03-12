@@ -1,0 +1,239 @@
+# Explorative Datenanalyse – Lerne den Datensatz kennen
+
+Wir haben in deinem Workspace bei [RStudio.cloud](rstudio.cloud) bereits ein sogenanntes Assignment (Template Airbnb) hochgeladen.
+Wenn du jetzt ein neues Projekt innerhalb des Workspaces "Class of '19/20 | TechAcademy | Data Science with R" erstellst, öffnet sich dein eigener Workspace, in dem wir schon ein paar Vorbereitungen für die erfolgreiche Bearbeitung getroffen haben.
+So sind einerseits schon die benötigten Datensätze in deinem Working Directory abgelegt. Außerdem haben wir eine RMarkdown Datei erstellt, in der du strukturiert deine Aufgaben coden und letztendlich berichten kannst. Öffne also als ersten Schritt die Datei `Markdown_Airbnb.Rmd`.
+
+## Datenimport, -bereinigung, -transformation und Lineplot (Calendar)
+
+In diesem Abschnitt wendest du die grundlegensten Operationen an: Importieren, Bereinigen, Transformieren und am Schluss eine erste einfache Visualisierung des Datensatzes.
+Zuerst muss der Datensatz aus deiner Ordnerstruktur in den Workspace geladen werden.
+Importiere den `calendar` Datensatz in deinen Workspace und benenne das Objekt danach.
+
+```{r, eval = FALSE}
+calendar <- read.csv("calendar.csv")
+```
+
+Verschaffe dir nun einen Überblick über den Datensatz.
+Wie ist dieser aufgebaut und welche Variablen sind darin enthalten?
+Was fällt dir dabei auf?
+Dafür kannst du zum Beispiel folgende Funktionen nutzen:
+```{r, eval = FALSE}
+head(calendar)
+str(calendar)
+summary(calendar)
+```
+
+Bevor du dir überlegst, welche statistischen Methoden für die Vorhersage geeignet sein könnten, ist es immer nützlich sich die Zusammenhänge zwischen den Variablen visuell darzustellen.
+Wie bereits oben angesprochen nennt man diesen Prozess Exploratory Data Analysis (EDA).
+
+Bevor wir damit starten können, müssen wir den Datensatz zuerst ein wenig bearbeiten, damit die Funktionen diesen verarbeiten können.
+Das klingt einfacher als gedacht –- sehr oft sind die Daten in einem unbrauchbaren Format.
+In unserem Fall ist zum Beispiel die Preis-Variable `price` als string-Variable gespeichert.
+Damit R diese verarbeiten kann, müssen wir ein Zeichen aus den Beobachtungen entfernen und die Variable in ein `numeric` Format bringen.
+Dafür kannst du die Funktionen `str_remove_all()` oder `gsub()` in Kombination mit `as.numeric()` verwenden.
+
+Damit der nächste Schritt leichter fällt, müssen wir noch die logische Variable `available` von einem `factor` zu einem `boolean` Datentyp konvertieren.
+Nutze dafür die `ifelse()` Funktion und ersetze jeweils "f" und "t" mit den dazugehörigen logischen Werten `FALSE` bzw. `TRUE`.
+Transformiere als letzten Schritt die Datumsvariable von in das R Datumsformat `date`.
+Erinnerst du dich an die `as.numeric()` Funktion?
+R besitzt eine ähnliche Funktion zur Konvertierung in Datums-Variablen.
+
+Unser Ziel ist es nun, die Anzahl der verfügbaren Airbnb Apartments über das nächste Jahr in einem einfachen Lineplot darzustellen.
+Jedoch ist unser Datensatz dafür noch nicht im richtigen Format -- aktuell hat jedes Apartment einen Eintrag für jeden der kommenden 365 Tage und jeweils eine Variable, die uns anzeigt, ob das Apartment an diesem Tag verfügbar ist.
+Unser transformierter Datensatz soll jedoch diese Infomationen zusammenfassen und nur einen einzigen Eintrag für jeden Tag im nächsten Jahr sowie die aggregierte Anzahl an verfügbaren Airbnbs in Berlin enthalten.
+Das R package `dplyr` ist die erste Wahl für diese Art von Transformations-Aufgaben.
+Falls du davon noch nichts gehört hast, absolviere den DataCamp Kurs dazu und/oder zu Exploratory Data Analysis.
+Nutze die `dplyr` Funktionen `group_by()` und `summarise()` dafür und speichere den daraus resultierenden Datensatz in einem neuen data frame ab, den du z.B. `avail_by_date` nennen kannst.
+Nutze für diese Aufgabe gerne das `dplyr` Cheat Sheet, auf welchem die Transformationen visuell dargestellt werden.
+
+Jetzt haben wir den Datensatz in ein brauchbares Format gebracht und können die Ergebnisse visualisieren.
+Bevor du dich an das Coden machst, überlege dir, was du von diesem Plot erwartest und wie er aussehen könnte.
+Vergleiche diese Erwartungen dann mit dem tatsächlichen Plot und versuche die markanten Stellen mit deiner Intuition zu erklären.
+Plotte dafür einen einfachen Lineplot, welcher die Anzahl der verfügbaren Apartments über die nächsten 365 Tage zeichnet.
+Du kannst dafür das `base` Package mit der Funktion `plot()` oder gleich das umfangreiche und sehr flexibel einsetzbare Grafikpackage `ggplot2` verwenden.
+```{r,  eval = FALSE}
+library(ggplot2)
+```
+Starte einfach und verfeinere dann deinen Plot.
+So in etwa kann dein erstes Ergebnis ausschauen:
+
+```{r availability simple, echo=FALSE, out.width = '100%', out.height = '500\textheight'}
+knitr::include_graphics("plots/1_3_AvailabilityOutlook.pdf")
+```
+
+Überlege dir nun, was der Verlauf des Graphen bedeutet: Warum sind so viele regelmäßige Muster in der Verfügbarkeit?
+Und warum gibt es immer wieder deutliche und abrupte Verringerungen der Verfügbarkeit?
+Unten siehst du einen Beispielplot, wie man mit `ggplot2` einen einfachen Plot verfeinern kann und somit die Aufmerksamkeit der Betrachter auf bestimmte Muster lenken kann.
+Halte dich jedoch nicht zu lange mit kleinen Feinheiten und Spielerein auf -- falls du am Schluss noch Zeit hast, kannst du dich noch einmal damit befassen.
+
+```{r availability advanced, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("plots/1_3_AvailabilityOutlook_advanced.pdf")
+```
+
+## Visualisiere individuelle Airbnb-Angebote (listings)
+
+Nachdem wir uns im ersten Schritt die Verfügbarkeit über die Zeit hinweg mithilfe des `calendar`-Datensatzes angeschaut haben, möchten wir nun etwas mehr über die Preisstrukturen der zur Verfügung stehenden Apartments herausfinden.
+Dazu benötigen wir den `listings`-Datensatz, welchen wir wie gewohnt in den Workspace laden können.
+Beim genaueren Betrachten fällt auf, dass die Spalte `price` und `cleaning_fee` ein $-Zeichen enthalten.
+Dies ist für uns zwar wichtig, damit wir wissen, um welche Währungen es sich handelt.
+Jedoch kann R damit nichts anfangen und weiß nicht, wie der String in eine Zahl umgewandelt werden soll. 
+
+Daher muss analog zur ersten Aufgabe für diese Spalten das Dollarzeichen gelöscht werden.
+Hinzu kommt, dass in manchen Spalten ein Komma als Tausender-Trennzeichen verwendet wird.
+Diese Kommas in der `price`-Spalte können auf die gleiche Weise entfernt werden.
+Da du die gleiche Vorgehensweise für die Spalten `price` und `cleaning_fee` benutzt, bietet sich hier ein `for`-loop an.
+Implementiere diese Schleife in einer selbst geschriebenen Funktion `clean_price()`, damit du dir besonders beim Vorhersageteil viele Zeilen Code sparst.
+
+Da wir jetzt den Datensatz gesäubert haben, können wir uns die Preisstruktur der verschiedenen Stadtteile genauer anschauen.
+Zunächst möchten wir wissen, wie hoch der Durchschnittspreis und die zugehörige Standardabweichung für jeden Stadteil ist.
+Erstelle dazu eine Liste mit den Namen der verschiedenen Stadtteile und dem `mean` sowie der `sd`.
+Verwende dafür zum Beispiel wieder die `dplyr`-Funktionen `group_by()` und `summarise()`.
+
+Nun möchten wir die Verteilung der Preise im durchschnittlich teuersten und im günstigsten Stadteil gegenüber stellen.
+Überlege dir dafür, welche Art von Diagramm du im Kurs kennengelernt hast und hier am meisten Sinn ergibt.
+Hast du das Diagramm erstellt, musst du vermutlich einen Teil der Ausreißer mit extrem hohen Preisen herausfiltern, um einen aussagekräftigen Plot zu erhalten. Das Filtern kannst du aber ganz einfach in den Plot-Spezifikationen mit `xlim` bzw. `ylim` durchführen.
+
+Bei Airbnb können die verfügbaren Apartments nach Preis sortiert werden und dem Kunden in der entsprechenden Reihenfolge angezeigt werden.
+Eine Methode, um in dieser Rangliste weiter oben zu landen, ist es, einen günstigen Preis anzugeben und dafür eine höhere Reinigungsgebühr (Cleaning Fee) zu verlangen.
+Können wir dieses Verhalten in unserem Datensatz erkennen?
+Erstelle dafür eine zusätzliche Spalte im `data.frame` mit dem Namen `price_and_clean`, in der du beide einzelnen Preise addierst.
+Untersuche nun, wie sich die Preisverteilung in den beiden zuvor untersuchten Stadteilen verändert.
+Stelle dazu beispielsweise den Preis sowie Preis + Reinigungsgebühr eines Stadteils in einem Diagramm gegenüber.
+Was kannst du hier beobachten?
+
+## Merge zwei Datensätze anhand einer ID (listings, reviews)
+
+Im vorherigen Teil hast du den `listings` Datensatz genauer kennen gelernt und visualisiert.
+Eine wichtige Information ist jedoch nicht in diesem Datensatz enthalten: Wie beliebt sind die einzelnen Apartments?
+Als Messgröße dafür verwenden wir die Anzahl der Bewertungen auf Airbnb.
+Diese Variable könnte später für die Preisvorhersage sehr wichtig werden.
+Zum Glück haben wir einen weiteren Datensatz `reviews`, indem zu jeder einzelnen Bewertung die Wohnungs-ID sowie das Datum gespeichert hat.
+Unser Ziel ist es jetzt, für jedes einzelne Apartment die Anzahl der Bewertungen zu zählen und diese in einem Datensatz abuzuspeichern.
+Da wir auch im `listings` Datensatz die ID finden, können wir anhand dieser Variable die zwei Datensätze zusammenführen.
+
+Lese zuerst den neuen `reviews` Datensatz in deinen Workspace ein und schaue ihn dir mit den bekannten Funktionen genauer an.
+Zähle nun die Anzahl der Bewertungen je Apartment.
+Tipp: Dies funktioniert sehr unkompliziert mit der `table()` Funktion oder mit `group_by()` und `summarise()`.
+Beachte jedoch, dass du das Ergebnis der `table()` Funktion noch in ein `data.frame`-Format für die weitere Verarbeitung bringen musst.
+Schaue dir nun den neuen Datensatz an.
+Hat jede ID genau einen Eintrag mit der Anzahl der Bewertungen?
+
+Damit du die Datensätze mergen kannst, musst du die neu generierten Variablen in dem neuen Datensatz noch umbenennen.
+Nenne die Wohnungs-ID analog zu dem `listings` Datensatz `id`, sowie die Anzahl der Bewertungen `n_reviews`.
+Dies klappt einfach mit der Funktion `rename()` aus dem `dplyr` Package.
+
+\begin{table}[!htbp] \centering 
+  \caption{Aggregate Number of Reviews} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} ccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & id & n\_reviews \\ 
+\hline \\[-1.8ex] 
+1 & 2015 & $118$ \\ 
+2 & 2695 & $6$ \\ 
+3 & 3176 & $143$ \\ 
+4 & 3309 & $25$ \\ 
+5 & 7071 & $197$ \\ 
+6 & 9991 & $6$ \\ 
+7 & 14325 & $23$ \\ 
+\vdots & \vdots & \vdots \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
+
+Wenn dein Datensatz so aussieht, kannst du ihn mit `listings` zusammenführen.
+```{r merge code snippet,  eval = FALSE}
+listings_reviews <- merge(dataset1, dataset2, by = ...)
+```
+
+Schaue dir den neuen Datensatz an.
+Ist die neue Variable `n_reviews` im richtigen Datentyp?
+
+Wir wollen uns jetzt einen kleineren Teil des Datensatzes genauer anschauen: Was haben die beliebtesten Apartments gemainsam?
+Als Indikator für die Beliebtheit eines Angebotes verwenden wir die vorher generierte Anzahl an Bewertungen `n_reviews`.
+
+Extrahiere die 200 am meisten rezensierten Apartments.
+Eine Herangehensweise dafür ist es, den Datensatz erst in absteigender Reihenfolge nach `n_reviews` zu sortieren und dann die ersten 200 Einträge in einen neuen Datensatz zu extrahieren.
+
+Verwende nun wieder `ggplot2`, um zu visualisieren, in welchen Stadtteilen die 200 am häufigsten rezensierten Apartments liegen.
+Ein Barplot bietet sich dafür an.
+Versuche gerne auch andere Arten von Plots, mit denen sich diese Fragestellung am besten beantworten lassen kann.
+
+```{r barplot top200 by neighbourhood, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("plots/3_3_Barplot_MostReviewed.pdf")
+```
+
+## Geo-Daten mit Karten visualisieren (listings_reviews)
+
+Wer die Internetseite von Airbnb kennt, hat bestimmt auch die Funktion gesehen, die Apartments auf einer Karte anzeigen zu lassen.
+Das gleiche können wir auch!
+Mit dem Unterschied, dass unsere Daten uns noch mehr Möglichkeiten geben anzuzeigen, was uns wirklich interessiert!
+
+Wie kommen wir praktisch zu unserer Karte?
+Es gibt einige unterschiedliche packages, die Karten in R zeichnen können.
+Die folgenden Tipps beziehen sich auf `ggmap`.
+
+Bevor du über eine API-Schnittstelle Kartenmaterial downloaden kannst, musst du die Ecken der Karte als Koordinaten definieren.
+Nutze zur Komplexitätsredukion den in der dritten Aufgabe gefilteren kleineren Datensatz mit den 200 am häufigsten rezensierten Apartments für diese Aufgabe.
+
+Definiere zuerst die Höhe und Breite der enthaltenen Koordinaten.
+
+```{r,  eval = FALSE}
+height <- max(...) - min(...)
+width <- max(...) - min(...)
+```
+
+Damit kannst du im nächsten Schritt die genauen Ecken relativ zu den Koordinaten im Datensatz festlegen.
+Dies erledigst du in einem Vektor, den du zum Beispiel `berlin_borders` nennen kannst.
+In diesem sind jeweils Werte für die Kanten der Karte definiert.
+Zu den jeweiligen Minima, bzw. Maxima der Koordinaten kannst du noch einen kleinen Sicherheitsabstand hinzufügen. 
+Spiele später etwas mit den Faktoren herum, um einen guten Kartenausschnitt zu finden.
+
+```{r,  eval = FALSE}
+berlin_borders <- c(bottom  = min(listing_top200$latitude)  - 0.1 * height, 
+                    top     = max(listing_top200$latitude)  + 0.1 * height,
+                    left    = min(listing_top200$longitude) - 0.1 * width,
+                    right   = max(listing_top200$longitude) + 0.1 * width)
+```
+
+Danach downloaden wir den definierten Kartenausschnitt vom Dienstleister Stamen Maps mit der Funktion `get_stamenmap()` und speichern diesen in einem Objekt.
+
+Jetzt können wir anfangen, Objekte auf der Karte zu platzieren.
+Damit die Karte nicht unübersichtlich wird, sollten nicht zu viele Apartments angezeigt werden.
+Praktisch ist dafür, dass wir in der letzten Aufgabe bereits eine Vorauswahl (Top 200) getroffen haben, die wir jetzt weiter benutzen können.
+
+Plotte die 200 meistbewerteten Listings (aus Aufgabe 3) auf der Karte!
+Wenn du Aufgabe 3 noch nicht gelöst hast, wähle einfach 200 Listings nach anderen Kriterien oder zufällig aus, um die Aufgabe zu lösen.
+Das sollte dann in etwa folgendermaßen aussehen:
+
+```{r map simple, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("plots/4_1_map_top200_simple.pdf")
+```
+
+In unseren Daten gibt es über die GPS-Koordinaten hinaus noch viele Informationen zu jedem Listing.
+Plotte die Apartments diesmal in unterschiedlichen Farben.
+Nutze als Unterscheidungsmerkmal hierfür die Stadtteile (auch um leicht zu sehen, ob die Zuordnung funktioniert).
+Unter diesem Absatz findest du ein Beispiel, wie ein etwas fortgeschrittener Plot dazu aussehen kann.
+Dieser Plot wurde mit `ggmaps` und dem zusätzlichen Package `concaveman` sowie dessen Funktion `geom_mark_hull()` erstellt, welches Polygone um ein Cluster von Koordinaten zeichnet.
+Es ist aber ausreichend, wenn du den gleichen Plot wie zuvor, nur mit unterschiedlichen Farben umsetzt.
+
+```{r map by neighbourhood, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("plots/4_2_map_top200_by_neighbourhood.pdf")
+```
+   
+Für einige Analysen ist es leichter, wenn man nicht einfach nur Punkte, sondern dessen Verteilungen auf einer Karte sieht.
+Um zum Beispiel zu erkennen, wo sich viele Apartments auf wenig Raum befinden, kannst du dir die Apartment-Dichte anzeigen lassen.
+Erstelle einen solchen zweidimensionalen Dichteplot mit `geom_density2d()` sowie `stat_density2d()`auf der Karte!
+Falls du nicht genau weißt, wie die einzelnen Argumente befüllt werden sollen, google dich zu einer Lösung.
+
+```{r map density, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("plots/4_3_map_top200_density.pdf")
+```
+
+Herzlichen Glückwunsch – Du hast jetzt dank viel Arbeit mit grundlegenden Daten-Transformationen und vieler Visualisierungen ein gutes Grundverständnis des Airbnb-Angebots in Berlin.
+Damit hast du den ersten Teil des Projektes erfolgreich abgeschlossen!
+Wenn du in der Anfänger-Gruppe bist, sind deine Mindestvoraussetzungen hiermit erfüllt.
+Wir empfehlen dir aber trotzdem dringend, dich auch mit dem folgenden Teil auseinanderzusetzen. Denn wir entwickeln jetzt Methoden, um die Zukunft vorauszusagen!
+Klingt spannend, oder?

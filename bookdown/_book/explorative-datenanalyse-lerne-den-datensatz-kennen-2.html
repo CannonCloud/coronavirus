@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Kapitel 3 Explorative Datenanalyse – Lerne den Datensatz kennen |  AirBnB Projektleitfaden</title>
+  <meta name="description" content="Bookdown Version des TechAcademy Leitfadens" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Kapitel 3 Explorative Datenanalyse – Lerne den Datensatz kennen |  AirBnB Projektleitfaden" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Bookdown Version des TechAcademy Leitfadens" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Kapitel 3 Explorative Datenanalyse – Lerne den Datensatz kennen |  AirBnB Projektleitfaden" />
+  
+  <meta name="twitter:description" content="Bookdown Version des TechAcademy Leitfadens" />
+  
+
+<meta name="author" content="TechAcademy e.V." />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="wofür-ist-dieses-dokument-gedacht-1.html"/>
+<link rel="next" href="preisvorhersage-wende-statistische-methoden-an-2.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">TechAcademy e.V. | Data Science mit R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Wofür ist dieses Dokument gedacht?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#um-was-geht-das-projekt"><i class="fa fa-check"></i><b>1.1</b> Um was geht das Projekt?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#was-ist-das-ziel"><i class="fa fa-check"></i><b>1.2</b> Was ist das Ziel?</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#explorative-datenanalyse-lerne-den-datensatz-kennen"><i class="fa fa-check"></i><b>1.2.1</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#preisvorhersage-wende-statistische-methoden-an"><i class="fa fa-check"></i><b>1.2.2</b> Preisvorhersage – Wende statistische Methoden an</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="wofür-ist-dieses-dokument-gedacht-1.html"><a href="wofür-ist-dieses-dokument-gedacht-1.html"><i class="fa fa-check"></i><b>2</b> Wofür ist dieses Dokument gedacht?</a><ul>
+<li class="chapter" data-level="2.1" data-path="wofür-ist-dieses-dokument-gedacht-1.html"><a href="wofür-ist-dieses-dokument-gedacht-1.html#um-was-geht-das-projekt-1"><i class="fa fa-check"></i><b>2.1</b> Um was geht das Projekt?</a></li>
+<li class="chapter" data-level="2.2" data-path="wofür-ist-dieses-dokument-gedacht-1.html"><a href="wofür-ist-dieses-dokument-gedacht-1.html#was-ist-das-ziel-1"><i class="fa fa-check"></i><b>2.2</b> Was ist das Ziel?</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="wofür-ist-dieses-dokument-gedacht-1.html"><a href="wofür-ist-dieses-dokument-gedacht-1.html#explorative-datenanalyse-lerne-den-datensatz-kennen-1"><i class="fa fa-check"></i><b>2.2.1</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a></li>
+<li class="chapter" data-level="2.2.2" data-path="wofür-ist-dieses-dokument-gedacht-1.html"><a href="wofür-ist-dieses-dokument-gedacht-1.html#preisvorhersage-wende-statistische-methoden-an-1"><i class="fa fa-check"></i><b>2.2.2</b> Preisvorhersage – Wende statistische Methoden an</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html"><i class="fa fa-check"></i><b>3</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a><ul>
+<li class="chapter" data-level="3.1" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html#datenimport--bereinigung--transformation-und-lineplot-calendar"><i class="fa fa-check"></i><b>3.1</b> Datenimport, -bereinigung, -transformation und Lineplot (Calendar)</a></li>
+<li class="chapter" data-level="3.2" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html#visualisiere-individuelle-airbnb-angebote-listings"><i class="fa fa-check"></i><b>3.2</b> Visualisiere individuelle Airbnb-Angebote (listings)</a></li>
+<li class="chapter" data-level="3.3" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html#merge-zwei-datensätze-anhand-einer-id-listings-reviews"><i class="fa fa-check"></i><b>3.3</b> Merge zwei Datensätze anhand einer ID (listings, reviews)</a></li>
+<li class="chapter" data-level="3.4" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-2.html#geo-daten-mit-karten-visualisieren-listings_reviews"><i class="fa fa-check"></i><b>3.4</b> Geo-Daten mit Karten visualisieren (listings_reviews)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="preisvorhersage-wende-statistische-methoden-an-2.html"><a href="preisvorhersage-wende-statistische-methoden-an-2.html"><i class="fa fa-check"></i><b>4</b> Preisvorhersage – Wende statistische Methoden an</a><ul>
+<li class="chapter" data-level="4.1" data-path="preisvorhersage-wende-statistische-methoden-an-2.html"><a href="preisvorhersage-wende-statistische-methoden-an-2.html#untersuche-die-korrelation-zwischen-den-variablen-näher-train"><i class="fa fa-check"></i><b>4.1</b> Untersuche die Korrelation zwischen den Variablen näher (train)</a></li>
+<li class="chapter" data-level="4.2" data-path="preisvorhersage-wende-statistische-methoden-an-2.html"><a href="preisvorhersage-wende-statistische-methoden-an-2.html#erste-vorhersagen-mit-einfachen-regressionsmodellen-train"><i class="fa fa-check"></i><b>4.2</b> Erste Vorhersagen mit einfachen Regressionsmodellen (train)</a></li>
+<li class="chapter" data-level="4.3" data-path="preisvorhersage-wende-statistische-methoden-an-2.html"><a href="preisvorhersage-wende-statistische-methoden-an-2.html#von-training-zu-testen-treffe-vorhersagen"><i class="fa fa-check"></i><b>4.3</b> Von Training zu Testen – Treffe Vorhersagen</a></li>
+<li class="chapter" data-level="4.4" data-path="preisvorhersage-wende-statistische-methoden-an-2.html"><a href="preisvorhersage-wende-statistische-methoden-an-2.html#wende-fortgeschrittene-machine-learning-algorithmen-an"><i class="fa fa-check"></i><b>4.4</b> Wende fortgeschrittene Machine Learning-Algorithmen an</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="noch-fragen.html"><a href="noch-fragen.html"><i class="fa fa-check"></i><b>5</b> Noch Fragen?</a></li>
+<li class="chapter" data-level="6" data-path="anhang.html"><a href="anhang.html"><i class="fa fa-check"></i><b>6</b> Anhang</a><ul>
+<li class="chapter" data-level="6.1" data-path="anhang.html"><a href="anhang.html#aufgaben-checkliste-für-das-airbnb-data-science-projekt"><i class="fa fa-check"></i><b>6.1</b> Aufgaben-Checkliste für das Airbnb Data Science Projekt</a></li>
+<li class="chapter" data-level="6.2" data-path="anhang.html"><a href="anhang.html#beschreibung-der-variablen-in-den-datensätzen"><i class="fa fa-check"></i><b>6.2</b> Beschreibung der Variablen in den Datensätzen</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><img src="plots/TA_Logo.png" style="width:2in" /> AirBnB Projektleitfaden</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="explorative-datenanalyse-lerne-den-datensatz-kennen-2" class="section level1">
+<h1><span class="header-section-number">Kapitel 3</span> Explorative Datenanalyse – Lerne den Datensatz kennen</h1>
+<p>Wir haben in deinem Workspace bei <a href="rstudio.cloud">RStudio.cloud</a> bereits ein sogenanntes Assignment (Template Airbnb) hochgeladen.
+Wenn du jetzt ein neues Projekt innerhalb des Workspaces “Class of ’19/20 | TechAcademy | Data Science with R” erstellst, öffnet sich dein eigener Workspace, in dem wir schon ein paar Vorbereitungen für die erfolgreiche Bearbeitung getroffen haben.
+So sind einerseits schon die benötigten Datensätze in deinem Working Directory abgelegt. Außerdem haben wir eine RMarkdown Datei erstellt, in der du strukturiert deine Aufgaben coden und letztendlich berichten kannst. Öffne also als ersten Schritt die Datei <code>Markdown_Airbnb.Rmd</code>.</p>
+<div id="datenimport--bereinigung--transformation-und-lineplot-calendar" class="section level2">
+<h2><span class="header-section-number">3.1</span> Datenimport, -bereinigung, -transformation und Lineplot (Calendar)</h2>
+<p>In diesem Abschnitt wendest du die grundlegensten Operationen an: Importieren, Bereinigen, Transformieren und am Schluss eine erste einfache Visualisierung des Datensatzes.
+Zuerst muss der Datensatz aus deiner Ordnerstruktur in den Workspace geladen werden.
+Importiere den <code>calendar</code> Datensatz in deinen Workspace und benenne das Objekt danach.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">calendar &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;calendar.csv&quot;</span>)</a></code></pre></div>
+<p>Verschaffe dir nun einen Überblick über den Datensatz.
+Wie ist dieser aufgebaut und welche Variablen sind darin enthalten?
+Was fällt dir dabei auf?
+Dafür kannst du zum Beispiel folgende Funktionen nutzen:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">head</span>(calendar)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">str</span>(calendar)</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">summary</span>(calendar)</a></code></pre></div>
+<p>Bevor du dir überlegst, welche statistischen Methoden für die Vorhersage geeignet sein könnten, ist es immer nützlich sich die Zusammenhänge zwischen den Variablen visuell darzustellen.
+Wie bereits oben angesprochen nennt man diesen Prozess Exploratory Data Analysis (EDA).</p>
+<p>Bevor wir damit starten können, müssen wir den Datensatz zuerst ein wenig bearbeiten, damit die Funktionen diesen verarbeiten können.
+Das klingt einfacher als gedacht –- sehr oft sind die Daten in einem unbrauchbaren Format.
+In unserem Fall ist zum Beispiel die Preis-Variable <code>price</code> als string-Variable gespeichert.
+Damit R diese verarbeiten kann, müssen wir ein Zeichen aus den Beobachtungen entfernen und die Variable in ein <code>numeric</code> Format bringen.
+Dafür kannst du die Funktionen <code>str_remove_all()</code> oder <code>gsub()</code> in Kombination mit <code>as.numeric()</code> verwenden.</p>
+<p>Damit der nächste Schritt leichter fällt, müssen wir noch die logische Variable <code>available</code> von einem <code>factor</code> zu einem <code>boolean</code> Datentyp konvertieren.
+Nutze dafür die <code>ifelse()</code> Funktion und ersetze jeweils “f” und “t” mit den dazugehörigen logischen Werten <code>FALSE</code> bzw. <code>TRUE</code>.
+Transformiere als letzten Schritt die Datumsvariable von in das R Datumsformat <code>date</code>.
+Erinnerst du dich an die <code>as.numeric()</code> Funktion?
+R besitzt eine ähnliche Funktion zur Konvertierung in Datums-Variablen.</p>
+<p>Unser Ziel ist es nun, die Anzahl der verfügbaren Airbnb Apartments über das nächste Jahr in einem einfachen Lineplot darzustellen.
+Jedoch ist unser Datensatz dafür noch nicht im richtigen Format – aktuell hat jedes Apartment einen Eintrag für jeden der kommenden 365 Tage und jeweils eine Variable, die uns anzeigt, ob das Apartment an diesem Tag verfügbar ist.
+Unser transformierter Datensatz soll jedoch diese Infomationen zusammenfassen und nur einen einzigen Eintrag für jeden Tag im nächsten Jahr sowie die aggregierte Anzahl an verfügbaren Airbnbs in Berlin enthalten.
+Das R package <code>dplyr</code> ist die erste Wahl für diese Art von Transformations-Aufgaben.
+Falls du davon noch nichts gehört hast, absolviere den DataCamp Kurs dazu und/oder zu Exploratory Data Analysis.
+Nutze die <code>dplyr</code> Funktionen <code>group_by()</code> und <code>summarise()</code> dafür und speichere den daraus resultierenden Datensatz in einem neuen data frame ab, den du z.B. <code>avail_by_date</code> nennen kannst.
+Nutze für diese Aufgabe gerne das <code>dplyr</code> Cheat Sheet, auf welchem die Transformationen visuell dargestellt werden.</p>
+<p>Jetzt haben wir den Datensatz in ein brauchbares Format gebracht und können die Ergebnisse visualisieren.
+Bevor du dich an das Coden machst, überlege dir, was du von diesem Plot erwartest und wie er aussehen könnte.
+Vergleiche diese Erwartungen dann mit dem tatsächlichen Plot und versuche die markanten Stellen mit deiner Intuition zu erklären.
+Plotte dafür einen einfachen Lineplot, welcher die Anzahl der verfügbaren Apartments über die nächsten 365 Tage zeichnet.
+Du kannst dafür das <code>base</code> Package mit der Funktion <code>plot()</code> oder gleich das umfangreiche und sehr flexibel einsetzbare Grafikpackage <code>ggplot2</code> verwenden.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<p>Starte einfach und verfeinere dann deinen Plot.
+So in etwa kann dein erstes Ergebnis ausschauen:</p>
+<embed src="plots/1_3_AvailabilityOutlook.pdf" width="100%" height="500 extheight" type="application/pdf" />
+<p>Überlege dir nun, was der Verlauf des Graphen bedeutet: Warum sind so viele regelmäßige Muster in der Verfügbarkeit?
+Und warum gibt es immer wieder deutliche und abrupte Verringerungen der Verfügbarkeit?
+Unten siehst du einen Beispielplot, wie man mit <code>ggplot2</code> einen einfachen Plot verfeinern kann und somit die Aufmerksamkeit der Betrachter auf bestimmte Muster lenken kann.
+Halte dich jedoch nicht zu lange mit kleinen Feinheiten und Spielerein auf – falls du am Schluss noch Zeit hast, kannst du dich noch einmal damit befassen.</p>
+<embed src="plots/1_3_AvailabilityOutlook_advanced.pdf" width="100%" type="application/pdf" />
+</div>
+<div id="visualisiere-individuelle-airbnb-angebote-listings" class="section level2">
+<h2><span class="header-section-number">3.2</span> Visualisiere individuelle Airbnb-Angebote (listings)</h2>
+<p>Nachdem wir uns im ersten Schritt die Verfügbarkeit über die Zeit hinweg mithilfe des <code>calendar</code>-Datensatzes angeschaut haben, möchten wir nun etwas mehr über die Preisstrukturen der zur Verfügung stehenden Apartments herausfinden.
+Dazu benötigen wir den <code>listings</code>-Datensatz, welchen wir wie gewohnt in den Workspace laden können.
+Beim genaueren Betrachten fällt auf, dass die Spalte <code>price</code> und <code>cleaning_fee</code> ein $-Zeichen enthalten.
+Dies ist für uns zwar wichtig, damit wir wissen, um welche Währungen es sich handelt.
+Jedoch kann R damit nichts anfangen und weiß nicht, wie der String in eine Zahl umgewandelt werden soll.</p>
+<p>Daher muss analog zur ersten Aufgabe für diese Spalten das Dollarzeichen gelöscht werden.
+Hinzu kommt, dass in manchen Spalten ein Komma als Tausender-Trennzeichen verwendet wird.
+Diese Kommas in der <code>price</code>-Spalte können auf die gleiche Weise entfernt werden.
+Da du die gleiche Vorgehensweise für die Spalten <code>price</code> und <code>cleaning_fee</code> benutzt, bietet sich hier ein <code>for</code>-loop an.
+Implementiere diese Schleife in einer selbst geschriebenen Funktion <code>clean_price()</code>, damit du dir besonders beim Vorhersageteil viele Zeilen Code sparst.</p>
+<p>Da wir jetzt den Datensatz gesäubert haben, können wir uns die Preisstruktur der verschiedenen Stadtteile genauer anschauen.
+Zunächst möchten wir wissen, wie hoch der Durchschnittspreis und die zugehörige Standardabweichung für jeden Stadteil ist.
+Erstelle dazu eine Liste mit den Namen der verschiedenen Stadtteile und dem <code>mean</code> sowie der <code>sd</code>.
+Verwende dafür zum Beispiel wieder die <code>dplyr</code>-Funktionen <code>group_by()</code> und <code>summarise()</code>.</p>
+<p>Nun möchten wir die Verteilung der Preise im durchschnittlich teuersten und im günstigsten Stadteil gegenüber stellen.
+Überlege dir dafür, welche Art von Diagramm du im Kurs kennengelernt hast und hier am meisten Sinn ergibt.
+Hast du das Diagramm erstellt, musst du vermutlich einen Teil der Ausreißer mit extrem hohen Preisen herausfiltern, um einen aussagekräftigen Plot zu erhalten. Das Filtern kannst du aber ganz einfach in den Plot-Spezifikationen mit <code>xlim</code> bzw. <code>ylim</code> durchführen.</p>
+<p>Bei Airbnb können die verfügbaren Apartments nach Preis sortiert werden und dem Kunden in der entsprechenden Reihenfolge angezeigt werden.
+Eine Methode, um in dieser Rangliste weiter oben zu landen, ist es, einen günstigen Preis anzugeben und dafür eine höhere Reinigungsgebühr (Cleaning Fee) zu verlangen.
+Können wir dieses Verhalten in unserem Datensatz erkennen?
+Erstelle dafür eine zusätzliche Spalte im <code>data.frame</code> mit dem Namen <code>price_and_clean</code>, in der du beide einzelnen Preise addierst.
+Untersuche nun, wie sich die Preisverteilung in den beiden zuvor untersuchten Stadteilen verändert.
+Stelle dazu beispielsweise den Preis sowie Preis + Reinigungsgebühr eines Stadteils in einem Diagramm gegenüber.
+Was kannst du hier beobachten?</p>
+</div>
+<div id="merge-zwei-datensätze-anhand-einer-id-listings-reviews" class="section level2">
+<h2><span class="header-section-number">3.3</span> Merge zwei Datensätze anhand einer ID (listings, reviews)</h2>
+<p>Im vorherigen Teil hast du den <code>listings</code> Datensatz genauer kennen gelernt und visualisiert.
+Eine wichtige Information ist jedoch nicht in diesem Datensatz enthalten: Wie beliebt sind die einzelnen Apartments?
+Als Messgröße dafür verwenden wir die Anzahl der Bewertungen auf Airbnb.
+Diese Variable könnte später für die Preisvorhersage sehr wichtig werden.
+Zum Glück haben wir einen weiteren Datensatz <code>reviews</code>, indem zu jeder einzelnen Bewertung die Wohnungs-ID sowie das Datum gespeichert hat.
+Unser Ziel ist es jetzt, für jedes einzelne Apartment die Anzahl der Bewertungen zu zählen und diese in einem Datensatz abuzuspeichern.
+Da wir auch im <code>listings</code> Datensatz die ID finden, können wir anhand dieser Variable die zwei Datensätze zusammenführen.</p>
+<p>Lese zuerst den neuen <code>reviews</code> Datensatz in deinen Workspace ein und schaue ihn dir mit den bekannten Funktionen genauer an.
+Zähle nun die Anzahl der Bewertungen je Apartment.
+Tipp: Dies funktioniert sehr unkompliziert mit der <code>table()</code> Funktion oder mit <code>group_by()</code> und <code>summarise()</code>.
+Beachte jedoch, dass du das Ergebnis der <code>table()</code> Funktion noch in ein <code>data.frame</code>-Format für die weitere Verarbeitung bringen musst.
+Schaue dir nun den neuen Datensatz an.
+Hat jede ID genau einen Eintrag mit der Anzahl der Bewertungen?</p>
+<p>Damit du die Datensätze mergen kannst, musst du die neu generierten Variablen in dem neuen Datensatz noch umbenennen.
+Nenne die Wohnungs-ID analog zu dem <code>listings</code> Datensatz <code>id</code>, sowie die Anzahl der Bewertungen <code>n_reviews</code>.
+Dies klappt einfach mit der Funktion <code>rename()</code> aus dem <code>dplyr</code> Package.</p>
+
+<p>Wenn dein Datensatz so aussieht, kannst du ihn mit <code>listings</code> zusammenführen.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">listings_reviews &lt;-<span class="st"> </span><span class="kw">merge</span>(dataset1, dataset2, <span class="dt">by =</span> ...)</a></code></pre></div>
+<p>Schaue dir den neuen Datensatz an.
+Ist die neue Variable <code>n_reviews</code> im richtigen Datentyp?</p>
+<p>Wir wollen uns jetzt einen kleineren Teil des Datensatzes genauer anschauen: Was haben die beliebtesten Apartments gemainsam?
+Als Indikator für die Beliebtheit eines Angebotes verwenden wir die vorher generierte Anzahl an Bewertungen <code>n_reviews</code>.</p>
+<p>Extrahiere die 200 am meisten rezensierten Apartments.
+Eine Herangehensweise dafür ist es, den Datensatz erst in absteigender Reihenfolge nach <code>n_reviews</code> zu sortieren und dann die ersten 200 Einträge in einen neuen Datensatz zu extrahieren.</p>
+<p>Verwende nun wieder <code>ggplot2</code>, um zu visualisieren, in welchen Stadtteilen die 200 am häufigsten rezensierten Apartments liegen.
+Ein Barplot bietet sich dafür an.
+Versuche gerne auch andere Arten von Plots, mit denen sich diese Fragestellung am besten beantworten lassen kann.</p>
+<embed src="plots/3_3_Barplot_MostReviewed.pdf" width="100%" type="application/pdf" />
+</div>
+<div id="geo-daten-mit-karten-visualisieren-listings_reviews" class="section level2">
+<h2><span class="header-section-number">3.4</span> Geo-Daten mit Karten visualisieren (listings_reviews)</h2>
+<p>Wer die Internetseite von Airbnb kennt, hat bestimmt auch die Funktion gesehen, die Apartments auf einer Karte anzeigen zu lassen.
+Das gleiche können wir auch!
+Mit dem Unterschied, dass unsere Daten uns noch mehr Möglichkeiten geben anzuzeigen, was uns wirklich interessiert!</p>
+<p>Wie kommen wir praktisch zu unserer Karte?
+Es gibt einige unterschiedliche packages, die Karten in R zeichnen können.
+Die folgenden Tipps beziehen sich auf <code>ggmap</code>.</p>
+<p>Bevor du über eine API-Schnittstelle Kartenmaterial downloaden kannst, musst du die Ecken der Karte als Koordinaten definieren.
+Nutze zur Komplexitätsredukion den in der dritten Aufgabe gefilteren kleineren Datensatz mit den 200 am häufigsten rezensierten Apartments für diese Aufgabe.</p>
+<p>Definiere zuerst die Höhe und Breite der enthaltenen Koordinaten.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">height &lt;-<span class="st"> </span><span class="kw">max</span>(...) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(...)</a>
+<a class="sourceLine" id="cb5-2" title="2">width &lt;-<span class="st"> </span><span class="kw">max</span>(...) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(...)</a></code></pre></div>
+<p>Damit kannst du im nächsten Schritt die genauen Ecken relativ zu den Koordinaten im Datensatz festlegen.
+Dies erledigst du in einem Vektor, den du zum Beispiel <code>berlin_borders</code> nennen kannst.
+In diesem sind jeweils Werte für die Kanten der Karte definiert.
+Zu den jeweiligen Minima, bzw. Maxima der Koordinaten kannst du noch einen kleinen Sicherheitsabstand hinzufügen.
+Spiele später etwas mit den Faktoren herum, um einen guten Kartenausschnitt zu finden.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">berlin_borders &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">bottom  =</span> <span class="kw">min</span>(listing_top200<span class="op">$</span>latitude)  <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span>height, </a>
+<a class="sourceLine" id="cb6-2" title="2">                    <span class="dt">top     =</span> <span class="kw">max</span>(listing_top200<span class="op">$</span>latitude)  <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span>height,</a>
+<a class="sourceLine" id="cb6-3" title="3">                    <span class="dt">left    =</span> <span class="kw">min</span>(listing_top200<span class="op">$</span>longitude) <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span>width,</a>
+<a class="sourceLine" id="cb6-4" title="4">                    <span class="dt">right   =</span> <span class="kw">max</span>(listing_top200<span class="op">$</span>longitude) <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span> <span class="op">*</span><span class="st"> </span>width)</a></code></pre></div>
+<p>Danach downloaden wir den definierten Kartenausschnitt vom Dienstleister Stamen Maps mit der Funktion <code>get_stamenmap()</code> und speichern diesen in einem Objekt.</p>
+<p>Jetzt können wir anfangen, Objekte auf der Karte zu platzieren.
+Damit die Karte nicht unübersichtlich wird, sollten nicht zu viele Apartments angezeigt werden.
+Praktisch ist dafür, dass wir in der letzten Aufgabe bereits eine Vorauswahl (Top 200) getroffen haben, die wir jetzt weiter benutzen können.</p>
+<p>Plotte die 200 meistbewerteten Listings (aus Aufgabe 3) auf der Karte!
+Wenn du Aufgabe 3 noch nicht gelöst hast, wähle einfach 200 Listings nach anderen Kriterien oder zufällig aus, um die Aufgabe zu lösen.
+Das sollte dann in etwa folgendermaßen aussehen:</p>
+<embed src="plots/4_1_map_top200_simple.pdf" width="100%" type="application/pdf" />
+<p>In unseren Daten gibt es über die GPS-Koordinaten hinaus noch viele Informationen zu jedem Listing.
+Plotte die Apartments diesmal in unterschiedlichen Farben.
+Nutze als Unterscheidungsmerkmal hierfür die Stadtteile (auch um leicht zu sehen, ob die Zuordnung funktioniert).
+Unter diesem Absatz findest du ein Beispiel, wie ein etwas fortgeschrittener Plot dazu aussehen kann.
+Dieser Plot wurde mit <code>ggmaps</code> und dem zusätzlichen Package <code>concaveman</code> sowie dessen Funktion <code>geom_mark_hull()</code> erstellt, welches Polygone um ein Cluster von Koordinaten zeichnet.
+Es ist aber ausreichend, wenn du den gleichen Plot wie zuvor, nur mit unterschiedlichen Farben umsetzt.</p>
+<embed src="plots/4_2_map_top200_by_neighbourhood.pdf" width="100%" type="application/pdf" />
+<p>Für einige Analysen ist es leichter, wenn man nicht einfach nur Punkte, sondern dessen Verteilungen auf einer Karte sieht.
+Um zum Beispiel zu erkennen, wo sich viele Apartments auf wenig Raum befinden, kannst du dir die Apartment-Dichte anzeigen lassen.
+Erstelle einen solchen zweidimensionalen Dichteplot mit <code>geom_density2d()</code> sowie <code>stat_density2d()</code>auf der Karte!
+Falls du nicht genau weißt, wie die einzelnen Argumente befüllt werden sollen, google dich zu einer Lösung.</p>
+<embed src="plots/4_3_map_top200_density.pdf" width="100%" type="application/pdf" />
+<p>Herzlichen Glückwunsch – Du hast jetzt dank viel Arbeit mit grundlegenden Daten-Transformationen und vieler Visualisierungen ein gutes Grundverständnis des Airbnb-Angebots in Berlin.
+Damit hast du den ersten Teil des Projektes erfolgreich abgeschlossen!
+Wenn du in der Anfänger-Gruppe bist, sind deine Mindestvoraussetzungen hiermit erfüllt.
+Wir empfehlen dir aber trotzdem dringend, dich auch mit dem folgenden Teil auseinanderzusetzen. Denn wir entwickeln jetzt Methoden, um die Zukunft vorauszusagen!
+Klingt spannend, oder?</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="wofür-ist-dieses-dokument-gedacht-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="preisvorhersage-wende-statistische-methoden-an-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-test-2.pdf", "bookdown-test-2.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

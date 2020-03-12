@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Kapitel 2 Coronavirus Projekt |  AirBnB Projektleitfaden</title>
+  <meta name="description" content="Bookdown Version des TechAcademy Leitfadens" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Kapitel 2 Coronavirus Projekt |  AirBnB Projektleitfaden" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Bookdown Version des TechAcademy Leitfadens" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Kapitel 2 Coronavirus Projekt |  AirBnB Projektleitfaden" />
+  
+  <meta name="twitter:description" content="Bookdown Version des TechAcademy Leitfadens" />
+  
+
+<meta name="author" content="TechAcademy e.V." />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">TechAcademy e.V. | Data Science mit R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Wofür ist dieses Dokument gedacht?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#um-was-geht-das-projekt"><i class="fa fa-check"></i><b>1.1</b> Um was geht das Projekt?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#was-ist-das-ziel"><i class="fa fa-check"></i><b>1.2</b> Was ist das Ziel?</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#explorative-datenanalyse-lerne-den-datensatz-kennen"><i class="fa fa-check"></i><b>1.2.1</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#preisvorhersage-wende-statistische-methoden-an"><i class="fa fa-check"></i><b>1.2.2</b> Preisvorhersage – Wende statistische Methoden an</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="coronavirus-projekt.html"><a href="coronavirus-projekt.html"><i class="fa fa-check"></i><b>2</b> Coronavirus Projekt</a></li>
+<li class="chapter" data-level="3" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><i class="fa fa-check"></i><b>3</b> Explorative Datenanalyse – Lerne den Datensatz kennen</a><ul>
+<li class="chapter" data-level="3.1" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#datenimport--bereinigung--transformation-und-lineplot-calendar"><i class="fa fa-check"></i><b>3.1</b> Datenimport, -bereinigung, -transformation und Lineplot (Calendar)</a></li>
+<li class="chapter" data-level="3.2" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#visualisiere-individuelle-airbnb-angebote-listings"><i class="fa fa-check"></i><b>3.2</b> Visualisiere individuelle Airbnb-Angebote (listings)</a></li>
+<li class="chapter" data-level="3.3" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#merge-zwei-datensätze-anhand-einer-id-listings-reviews"><i class="fa fa-check"></i><b>3.3</b> Merge zwei Datensätze anhand einer ID (listings, reviews)</a></li>
+<li class="chapter" data-level="3.4" data-path="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html"><a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html#geo-daten-mit-karten-visualisieren-listings_reviews"><i class="fa fa-check"></i><b>3.4</b> Geo-Daten mit Karten visualisieren (listings_reviews)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html"><i class="fa fa-check"></i><b>4</b> Preisvorhersage – Wende statistische Methoden an</a><ul>
+<li class="chapter" data-level="4.1" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#untersuche-die-korrelation-zwischen-den-variablen-näher-train"><i class="fa fa-check"></i><b>4.1</b> Untersuche die Korrelation zwischen den Variablen näher (train)</a></li>
+<li class="chapter" data-level="4.2" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#erste-vorhersagen-mit-einfachen-regressionsmodellen-train"><i class="fa fa-check"></i><b>4.2</b> Erste Vorhersagen mit einfachen Regressionsmodellen (train)</a></li>
+<li class="chapter" data-level="4.3" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#von-training-zu-testen-treffe-vorhersagen"><i class="fa fa-check"></i><b>4.3</b> Von Training zu Testen – Treffe Vorhersagen</a></li>
+<li class="chapter" data-level="4.4" data-path="preisvorhersage-wende-statistische-methoden-an-1.html"><a href="preisvorhersage-wende-statistische-methoden-an-1.html#wende-fortgeschrittene-machine-learning-algorithmen-an"><i class="fa fa-check"></i><b>4.4</b> Wende fortgeschrittene Machine Learning-Algorithmen an</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="noch-fragen.html"><a href="noch-fragen.html"><i class="fa fa-check"></i><b>5</b> Noch Fragen?</a></li>
+<li class="chapter" data-level="6" data-path="anhang.html"><a href="anhang.html"><i class="fa fa-check"></i><b>6</b> Anhang</a><ul>
+<li class="chapter" data-level="6.1" data-path="anhang.html"><a href="anhang.html#aufgaben-checkliste-für-das-airbnb-data-science-projekt"><i class="fa fa-check"></i><b>6.1</b> Aufgaben-Checkliste für das Airbnb Data Science Projekt</a></li>
+<li class="chapter" data-level="6.2" data-path="anhang.html"><a href="anhang.html#beschreibung-der-variablen-in-den-datensätzen"><i class="fa fa-check"></i><b>6.2</b> Beschreibung der Variablen in den Datensätzen</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><img src="plots/TA_Logo.png" style="width:2in" /><br />
+AirBnB Projektleitfaden</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="coronavirus-projekt" class="section level1">
+<h1><span class="header-section-number">Kapitel 2</span> Coronavirus Projekt</h1>
+<p>Blaaaa Test</p>
+<pre><code>&gt; &#39;data.frame&#39;: 70 obs. of  5 variables:
+&gt;  $ date   : Factor w/ 70 levels &quot;2020-01-01&quot;,&quot;2020-01-02&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+&gt;  $ hits   : int  0 0 0 0 0 0 0 0 0 0 ...
+&gt;  $ geo    : Factor w/ 1 level &quot;world&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+&gt;  $ keyword: Factor w/ 1 level &quot;coronavirus&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+&gt;  $ gprop  : Factor w/ 1 level &quot;web&quot;: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p><img src="output_files/figure-html/unnamed-chunk-1-1.png" width="1152" /></p>
+<pre><code>&gt; &#39;data.frame&#39;: 340 obs. of  8 variables:
+&gt;  $ symbol  : Factor w/ 7 levels &quot;^GDAXI&quot;,&quot;^GSPC&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+&gt;  $ date    : Factor w/ 50 levels &quot;2020-01-02&quot;,&quot;2020-01-03&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+&gt;  $ open    : num  3245 3226 3218 3242 3239 ...
+&gt;  $ high    : num  3258 3246 3247 3245 3267 ...
+&gt;  $ low     : num  3236 3222 3215 3232 3237 ...
+&gt;  $ close   : num  3258 3235 3246 3237 3253 ...
+&gt;  $ volume  : num  3.46e+09 3.46e+09 3.67e+09 3.42e+09 3.72e+09 ...
+&gt;  $ adjusted: num  3258 3235 3246 3237 3253 ...</code></pre>
+<p><img src="output_files/figure-html/unnamed-chunk-1-2.png" width="1152" /></p>
+<pre><code>&gt; &#39;data.frame&#39;: 20200 obs. of  7 variables:
+&gt;  $ id       : int  1 2 3 4 5 6 7 8 9 10 ...
+&gt;  $ province : Factor w/ 297 levels &quot;Adams, IN&quot;,&quot;Alachua, FL&quot;,..: NA NA NA NA NA 20 179 275 216 NA ...
+&gt;  $ country  : Factor w/ 114 levels &quot;Afghanistan&quot;,..: 106 57 97 75 66 23 7 7 7 21 ...
+&gt;  $ latitude : num  15 36 1.28 28.17 2.5 ...
+&gt;  $ longitude: num  101 138 103.8 84.2 112.5 ...
+&gt;  $ time     : Factor w/ 50 levels &quot;2020-01-22&quot;,&quot;2020-01-23&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+&gt;  $ confirmed: int  2 2 NA NA NA NA NA NA NA NA ...</code></pre>
+<pre><code>&gt; [1] 0</code></pre>
+<p><img src="output_files/figure-html/unnamed-chunk-1-3.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-4.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-5.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-6.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-7.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-8.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-9.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-10.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-11.png" width="1152" /><img src="output_files/figure-html/unnamed-chunk-1-12.png" width="1152" /></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="explorative-datenanalyse-lerne-den-datensatz-kennen-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["output.pdf", "output.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
