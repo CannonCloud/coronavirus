@@ -4,6 +4,7 @@ library(dplyr)
 library(tidyr)
 library(lubridate)
 library(ggplot2)
+library(countrycode)
 
 ##########################################################
 # Download Johns Hopkins CSSE Data from GitHub
@@ -150,7 +151,7 @@ trends$interest_over_time %>%
   mutate(time = as.Date(time)) -> time_trend
 
 # reproducible routine for downloading and saving trends data for the project
-gtrend_list <- gtrends("coronavirus", gprop = "web", geo = "", time = "2020-01-01 2020-03-09")
+gtrend_list <- gtrends("coronavirus", gprop = "web", geo = "", time = "2020-01-01 2020-03-12")
 
 gtrend_list$interest_over_time %>% 
   mutate(hits = replace(hits, hits == "<1", 0)) %>% 
@@ -170,14 +171,14 @@ sp500_names <- tq_index("S&P500")
 
 sp500 <- tq_get(sp500_names$symbol,
                 from = "2020-01-01",
-                to = "2020-03-09",
+                to = "2020-03-12",
                 get = "stock.prices")
 
 # reproducible routine for downloading and saving trends data for the project
 selected_stocks <- c("^GSPC", "^GDAXI", "NFLX", "LHA.DE", "GILD", "MRNA", "NCLH")
 stock_df <- tq_get(selected_stocks,
        from = "2020-01-01",
-       to = "2020-03-09",
+       to = "2020-03-12",
        get = "stock.prices")
 
 write_csv(stock_df, paste("data\\stocks\\", "stocks.csv", sep = ""))
@@ -254,7 +255,7 @@ stock_df %>%
 # merge all data sets
 dfc_grouped_add %>% 
   left_join(stocks_wide, by = "time") %>% 
-  left_join(gtrend %>%
+  left_join(gtrend_df %>%
               rename(time = date,
                      searchindex = hits) %>% 
               select(c("time", searchindex)),
@@ -269,4 +270,9 @@ dfc_predict %>%
   pull(country) %>% 
   unique()
 
+# move old prediction file to archive, rename it and write new one
+file.copy("data\\predict\\predict.csv", "data\\predict\\archive")
+as.Date(file.info("data\\predict\\predict.csv")$mtime)
+file.rename("data\\predict\\archive\\predict.csv",
+            paste("data\\predict\\archive\\", as.Date(file.info("data\\predict\\predict.csv")$mtime), "_predict.csv", sep = ""))
 write_csv(dfc_predict, paste("data\\predict\\", "predict.csv", sep = ""))

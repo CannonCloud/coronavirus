@@ -10,8 +10,9 @@ library(geojsonio)
 library(viridis)
 library(magick) # for including a .png in plots
 TA_logo <- image_read("R/plots/TA_logo.png")
-
+library(gghighlight)
 library(GGally)
+library(ggrepel)
 
 
 ##########################################################
@@ -91,7 +92,7 @@ conf %>%
   summarize(confirmed = sum(confirmed),
             time = max(conf$time)) %>% 
   arrange(desc(confirmed)) %>% 
-  top_n(6, confirmed) %>% 
+  top_n(9, confirmed) %>% 
   pull(country) %>% 
   droplevels() -> top_countries
 
@@ -253,14 +254,15 @@ df_merged_country_time %>%
   mutate(mortality = deaths/confirmed) %>% 
   arrange(desc(mortality)) %>% 
 #  filter(country %in% top_countries) %>% 
-  head(25) %>% 
+  head(35) %>% 
   ggplot(aes(x = reorder(country, mortality))) +
   geom_bar(aes(weight = mortality), fill = "#3c4ee0") +
+  gghighlight(country %in% top_countries) +
   coord_flip() +
   labs(x = "Country",
        y = "Mortality Rate",
-       title = "Covid-19: Mortality Rate Differs Drastically Depending Countries",
-       subtitle = paste("Mortality Rate by Country. Last update:", max(conf_agg$time)),
+       title = "Covid-19: Mortality Rate Depends Drastically On Countries",
+       subtitle = paste("Mortality Rate by Country. Countries with Most Confirmed Cases Highlighted. Last update:", max(conf_agg$time)),
        caption = "Note: Mortality rate calculated as deaths/confirmed") +
   theme(plot.title = element_text(color = "#3c4ee0", face = 'bold'),
         plot.caption = element_text(hjust = 0, face = "italic"))
@@ -301,13 +303,25 @@ world_merged %>%
   ggplot(aes(x = long, y = lat, group = group)) +
   geom_polygon(aes(fill = confirmed), color = "black") +
   scale_fill_gradient(low = "#3c4ee0", high = "red", na.value = NA) +
-  theme_void()
+  theme_void() +
+  labs(title = "Covid-19: Worldwide Spread of the Disease",
+       subtitle = paste("Confirmed Cases by Country. Last update:", max(conf_agg$time)),
+       caption = "",
+       fill = "Confirmed Cases") +
+  theme(plot.title = element_text(color = "#3c4ee0", face = 'bold'))
+grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), width = unit(1.5, 'inches'))
   
 world_merged %>% 
   ggplot(aes(x = long, y = lat, group = group)) +
   geom_polygon(aes(fill = mortality), color = "black") +
   scale_fill_gradient(low = "#3c4ee0", high = "red", na.value = NA) +
-  theme_void()
+  theme_void() +
+  labs(title = "Covid-19: Mortality Rate Varies Largely",
+       subtitle = paste("Mortality Rate by Country. Last update:", max(conf_agg$time)),
+       caption = "",
+       fill = "Mortality Rate") +
+  theme(plot.title = element_text(color = "#3c4ee0", face = 'bold'))
+grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), width = unit(1.5, 'inches'))
 
 # Europe only
 eu_countries <- c("AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST",
@@ -325,11 +339,26 @@ world_merged %>%
   filter(countrycode %in% cc_europe) %>% 
   ggplot(aes(x = long, y = lat, group = group)) +
   geom_polygon(aes(fill = confirmed), color = "black") +
-  geom_text(data = label_centroids %>% filter(countrycode %in% cc_europe),
-            aes(x = long_mean, y = lat_mean, label = confirmed),
-            inherit.aes = FALSE) +
-  scale_fill_gradient(low = "lightgrey", high = "red", na.value = NA) +
-  theme_void()
+  # geom_label_repel(data = label_centroids %>% filter(countrycode %in% cc_europe),
+  #           aes(x = long_mean, y = lat_mean, label = confirmed, fontface = 2),
+  #           inherit.aes = FALSE,
+  #           segment.color = "white") +
+  geom_label_repel(data = label_centroids %>%
+                     filter(countrycode %in% cc_europe) %>%
+                     mutate(label = paste(region, confirmed, sep = "\n")),
+                   aes(x = long_mean, y = lat_mean, label = label),
+                   inherit.aes = FALSE,
+                   segment.color = "white",
+                   alpha = 0.85,
+                   size = 3) +
+  scale_fill_gradient(low = "#3c4ee0", high = "red", na.value = NA) +
+  theme_void() +
+  labs(title = "Covid-19: Spread of the Disease in Europe",
+       subtitle = paste("Confirmed Cases by Country. Last update:", max(conf_agg$time)),
+       caption = "",
+       fill = "Confirmed Cases") +
+  theme(plot.title = element_text(color = "#3c4ee0", face = 'bold'))
+grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), width = unit(1.5, 'inches'))
 
 
 
