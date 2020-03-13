@@ -207,27 +207,27 @@ grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), widt
 
 # Split data set in China and Rest of World
 # this exercise should not be included, since using facet_wrap with the full data set is (see above) more flexible
-df_merged %>% 
-  filter(country == "Mainland China") -> df_china
-
-df_merged %>% 
-  filter(country != "Mainland China") -> df_excl_china
-
-df_china %>% 
-  group_by(time) %>% # reduces granularity to days w/o time
-  summarize(confirmed = sum(confirmed),
-            deaths = sum(deaths),
-            recovered = sum(recovered),
-            netinfected = sum(netinfected)
-  ) -> df_single_day_china
-
-df_excl_china %>% 
-  group_by(time) %>% # reduces granularity to days w/o time
-  summarize(confirmed = sum(confirmed),
-            deaths = sum(deaths),
-            recovered = sum(recovered),
-            netinfected = sum(netinfected)
-  ) -> df_single_day_excl_china
+# df_merged %>% 
+#   filter(country == "Mainland China") -> df_china
+# 
+# df_merged %>% 
+#   filter(country != "Mainland China") -> df_excl_china
+# 
+# df_china %>% 
+#   group_by(time) %>% # reduces granularity to days w/o time
+#   summarize(confirmed = sum(confirmed),
+#             deaths = sum(deaths),
+#             recovered = sum(recovered),
+#             netinfected = sum(netinfected)
+#   ) -> df_single_day_china
+# 
+# df_excl_china %>% 
+#   group_by(time) %>% # reduces granularity to days w/o time
+#   summarize(confirmed = sum(confirmed),
+#             deaths = sum(deaths),
+#             recovered = sum(recovered),
+#             netinfected = sum(netinfected)
+#   ) -> df_single_day_excl_china
 
 
 # Barplot most recent date: by country
@@ -363,6 +363,7 @@ grid::grid.raster(TA_logo, x = 0.98, y = 0.01, just = c('right', 'bottom'), widt
 
 
 # leaflet interactive map
+# doesn't work properly so far
 WorldCountry <- geojsonio::geojson_read("https://raw.github.com/johan/world.geo.json/master/countries.geo.json", what = "sp")
 
 WorldCountry <- WorldCountry[WorldCountry$id %in% data$Country, ]
@@ -415,11 +416,21 @@ Map %>%
 ## Part B: Prediction
 ##########################################################
 
+library(recipes)
+
 train <- read.csv("data/predict/predict.csv")
+train %>% 
+  select_if(is.numeric) %>% 
+  cor() %>% 
+  round(2)
+corr_features <- c("days_outbreak", "confirmed", "deaths", "recovered", "netinfected",
+              "SP500", "searchindex", "health_index", "population")
+
 
 ggpairs(train %>%
-          select(c("days_outbreak", "confirmed", "deaths", "recovered", "netinfected",
-                   "SP500", "searchindex", "health_index", "population"))) +
+#          select(c("days_outbreak", "confirmed", "deaths", "recovered", "netinfected",
+#                   "SP500", "searchindex", "health_index", "population"))) +
+  select(netinfected, days_outbreak, population, health_index, searchindex, sars_netinfected, SP500)) +
   labs(title = 'Correlation and Scatterplots for Select Features',
        subtitle = "Get an intuition about which variables might be important for prediction",
        x = "") +
@@ -437,9 +448,6 @@ grid::grid.raster(TA_logo, x = 0.055, y = 0.01, just = c('left', 'bottom'), widt
 #   -> stock value driven by interest in the topic coronavirus?
 
 ## SIMPLE REGRESSION
-
-train %>% 
-  drop_na() -> train
 
 lm(confirmed ~ deaths, data = train) %>% 
   summary()
@@ -459,9 +467,33 @@ lm(deaths ~ days_outbreak, data = train) %>%
 lm(deaths ~ country, data = train) %>% 
   summary()
 
-m_reg1 <- lm(deaths ~ days_outbreak + population + health_index, data = train) 
+lm(deaths ~ sars_deaths, data = train) %>% 
+  summary()
+
+train %>% 
+  select(deaths, days_outbreak, population, health_index, sars_deaths) -> train_select
+
+train %>%
+  select(id, deaths, days_outbreak, population, health_index, sars_deaths) %>% 
+  filter(is.na(sars_deaths))
+
+# problem: countries, which have NA population and health index
+train %>% 
+  filter(is.na(population)) %>% 
+  pull(countrycode) %>% 
+  unique() -> remove_countrycode
+
+# clean train
+train %>% 
+  select(id, country, time, netinfected, deaths, days_outbreak, population, health_index, searchindex, sars_deaths, SP500) %>% 
+  drop_na() -> train_c
+
+
+m_reg1 <- lm(deaths ~ days_outbreak + population + health_index + sars_deaths, data = train_c) 
+summary(m_reg1)
 yhat <- predict(m_reg1)
-train_pred <- cbind(train, yhat)
+train_pred <- cbind(train_c, yhat)
+View(train_pred)
 
 train_pred %>% 
   ggplot(aes(yhat, deaths)) +
@@ -475,11 +507,107 @@ train %>%
   ggplot(aes(x = days_outbreak, y = confirmed)) +
   geom_line(aes(color = country))
 
+## ALTERNATIVE: train on China, predict on other countries
+# Notes:
+# use per capita measures to make it independent of absolute values
+# prediction of confirmed_capita and deaths_capita seems to work partly by the sars outbreak
+# netinfected almost no correlation to sars_netinfected per capita
+# predicting with sars_confirmed_capita works well for China, but doesn't make any sense, since most other countries didn't have a SARS outbreak
+
+train %>% 
+  filter(countrycode == "CHN") -> train_china 
+
+train_china$netinfected_capita_bin <- as.numeric(cut_number(train_china$netinfected_capita,7))
+train_china$sars_netinfected_capita_bin <- as.numeric(cut_number(train_china$sars_netinfected_capita,7))
+
+ggpairs(train_china %>%
+          select(confirmed_capita, sars_confirmed_capita, deaths_capita, sars_deaths_capita, days_outbreak, netinfected_capita, sars_netinfected_capita))
+
+# testing different models
+lm(confirmed_capita ~ sars_confirmed_capita + days_larger_100, data = train_china) %>% 
+  summary()
+
+lm(netinfected_capita ~ sars_netinfected_capita, data = train_china) %>% 
+  summary()
+
+lm(deaths_capita ~ sars_deaths_capita + days_larger_100, data = train_china) %>% 
+  summary()
+
+lm(confirmed_capita ~ days_larger_100 + deaths_capita, data = train_china) %>% 
+  summary()
+
+lm(lag_confirmed ~ days_larger_100 + deaths, data = train_china) %>% 
+  summary()
+
+# using one to predict
+m_reg2 <- lm(confirmed_capita ~ days_larger_100, data = train_china)
+yhat <- predict(m_reg2)
+y_yhat_m_reg2 <- cbind(train_china$confirmed_capita, yhat)
+
+# test
+train %>% 
+  filter(countrycode != "CHN") %>% 
+  select(country, time, sars_confirmed_capita, days_larger_100, confirmed_capita, deaths_capita, confirmed, searchindex) %>% 
+  drop_na() -> test_wo_china
+
+summary(predict(m_reg2, test_wo_china))
+yhat_test_wo_china <- predict(m_reg2, test_wo_china)
+test_wo_china_yhat <- cbind(test_wo_china, yhat_test_wo_china)
+
+test_wo_china_yhat %>% 
+  ggplot(aes(days_larger_100, confirmed_capita)) +
+  geom_point() +
+  geom_line(aes(y = yhat_test_wo_china)) +
+  facet_wrap(~country, scales = "free")
 
 
 
 
 
+
+
+## ALTERNATIVE: train on half of top countries, predict on other top countries
+train_countries <- top_countries[c(FALSE, TRUE)]
+test_countries <- top_countries[c(TRUE, FALSE)]
+
+train %>% 
+  filter(country %in% train_countries) -> train_top
+
+train %>% 
+  filter(country %in% test_countries) -> test_top
+
+# checking different models with simple regressions
+lm(confirmed ~ days_larger_100 + health_index + population, data = train_top) %>% 
+  summary()
+
+lm(deaths ~ days_larger_100 + health_index + population, data = train_top) %>% 
+  summary()
+
+# using one to predict
+m_reg3 <- lm(confirmed ~ days_larger_100 + health_index + population, data = train_top)
+yhat <- predict(m_reg3)
+y_yhat_m_reg3 <- cbind(train_top$confirmed, yhat)
+
+# test
+
+yhat_test_top <- predict(m_reg3, test_top)
+test_top_yhat <- cbind(test_top, yhat_test_top)
+
+test_top_yhat %>% 
+  select(country, time, days_larger_100, population, health_index, deaths, yhat_test_top) %>% 
+  View()
+
+train_top %>% 
+  ggplot(aes(days_larger_100, confirmed)) +
+  geom_point() +
+  geom_line(aes(y = yhat)) +
+  facet_wrap(~country, scales = "free_y")
+
+test_top_yhat %>% 
+  ggplot(aes(days_larger_100, confirmed)) +
+  geom_point() +
+  geom_line(aes(y = yhat_test_top)) +
+  facet_wrap(~country, scales = "free_y")
 
 
 
