@@ -262,6 +262,10 @@ dfc_grouped_add %>%
             by = "time") %>% 
   left_join(health[,c("health_index", "countrycode")], by = "countrycode") %>% 
   left_join(pop_c, by = "countrycode") %>% 
+  mutate(confirmed_capita = confirmed/population,
+         deaths_capita = deaths/population,
+         recovered_capita = recovered/population,
+         netinfected_capita = netinfected/population) %>% 
   tibble::rowid_to_column("id") -> dfc_predict 
 
 # check which countries aren't included in health_index/population data
